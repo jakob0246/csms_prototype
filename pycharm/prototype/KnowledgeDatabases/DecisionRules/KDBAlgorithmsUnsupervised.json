@@ -1,0 +1,101 @@
+{
+    "weights": {
+        "n_rows": 2,
+        "n_features": 2,
+        "outlier_percentage": 1.5,
+        "normal_distribution_percentage": 1,
+        "high_correlation_percentage": 1
+    },
+    "threshold_borders": [
+        {
+            "attribute": "n_rows",
+            "borders": [1000, 10000, 1000000]
+        },
+        {
+            "attribute": "n_features",
+            "borders": [10, 100, 1000]
+        },
+        {
+            "attribute": "outlier_percentage",
+            "borders": [0.001, 0.01, 0.1]
+        },
+        {
+            "attribute": "normal_distribution_percentage",
+            "borders": [0.05, 0.2, 0.3]
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "borders": [0.2, 0.4, 0.6]
+        }
+    ],
+    "decision_rules": [
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "kmeans"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "normal_distribution_percentage",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "normal_distribution_percentage",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "meanshift"
+        },
+        {
+            "attribute": "normal_distribution_percentage",
+            "algorithm": "meanshift"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "optics"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "affinity"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "spectral"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "spectral"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "spectral"
+        }
+    ]
+}
