@@ -2,8 +2,8 @@
 .DS_Store
 
 # PyCharm
-venv/
+/venv/
 /.idea/
-__pychache__/
+/__pychache__/
 
 # Misc
