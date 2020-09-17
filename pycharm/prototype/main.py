@@ -11,8 +11,6 @@ from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 from IterativeStepDecider import decide_iterative_step
 from KDBSetupManager import check_for_setup_in_knowledge_db, write_setup_to_knowledge_db
 
-from DataClusterer import prepare_for_clustering, automatic_selection, unsupervised_clustering, supervised_learning_using_clustering
-
 
 supported_algorithms = {
     "unsupervised": {"kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm"},  # TODO: "dbscan"
