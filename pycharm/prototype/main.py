@@ -54,35 +54,37 @@ setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], h
 
 if setup_result == {}:
     # TODO: check for constraints
-    max_iterations = 1  # 10
+    max_iterations = 10  # 1
     speedup_multiplier = 10
-    sample_size = 1000  # 50
+    sample_size = 100  # 50, 1000
 
     algorithm = None
     algorithm_parameters = {}
 
     next_iterative_state = "algorithm_selection"
-    state_history = []
-    algorithm_history = []
-    adj_parameters_count = 0
-    other_algorithm_count = 0
+    history = []
     kdb_update_count = 0
     algorithms_knowledge_db = {}
-    previous_results = {}
     for iteration in range(max_iterations):
+        print(f"\nRunning Iteration [{iteration + 1}] ...")
+
         # select algorithm:
         if next_iterative_state == "algorithm_selection":
-            selected_algorithm, algorithm_scores, algorithms_knowledge_db = select_algorithm(profiled_metadata, hardware_specs, configuration_parameters, algorithms_knowledge_db, supervised=(config["general"]["learning_type"] == "supervised"))
+            selected_algorithm, algorithm_scores, algorithms_knowledge_db = select_algorithm(profiled_metadata, hardware_specs, configuration_parameters,
+                                                                                             algorithms_knowledge_db, supervised=(config["general"]["learning_type"] == "supervised"))
 
-            if iteration == 0 or (iteration != 0 and selected_algorithm != algorithm_history[iteration - 1]):
+            if iteration == 0 or (iteration != 0 and selected_algorithm != history[iteration - 1]["algorithm"]):
                 next_iterative_state = "parameter_tuning"
             else:
                 next_iterative_state = "program_generation_and_evaluation"
 
+            if iteration != 0 and history[iteration - 1]["updated_kdb"]:
+                next_iterative_state = "decide_iterative_step"
+
         # tune parameters:
         if next_iterative_state == "parameter_tuning":
             algorithm_parameters = tune_parameters(selected_algorithm, profiled_metadata, hardware_specs, configuration_parameters,
-                                                   config["general"]["learning_type"], dataset, config["dataset"]["class"], sample_size)  # TODO: change to non grid search ?
+                                                   config["general"]["learning_type"], dataset, config["dataset"]["class"], sample_size)
             next_iterative_state = "program_generation_and_evaluation"
 
         # generate and evaluate program:
@@ -90,17 +92,27 @@ if setup_result == {}:
             results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, sample_size, (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"])
 
             if config["general"]["learning_type"] == "supervised":
-                print("Iteration [" + str(iteration + 1) + "]: Got accuracy of " + str(results["accuracy"]) + " for \"" + selected_algorithm + "\" with parameters " + str(algorithm_parameters))
+                print(" -> Results Iteration [" + str(iteration + 1) + f"]: Got accuracy of {results['accuracy']:.4f} for \"" +
+                      selected_algorithm + f"\" (score of {algorithm_scores[selected_algorithm]}) with parameters: " + str(algorithm_parameters))
             else:
                 # TODO
                 pass
 
-        # decide next iterative step:
-        next_iterative_state, stop_csms, algorithms_knowledge_db, algorithm_parameters, state_history, algorithm_history, adj_parameters_count, other_algorithm_count, kdb_update_count = decide_iterative_step(iteration, results, previous_results, selected_algorithm, algorithm_scores, algorithm_parameters, algorithms_knowledge_db, state_history, algorithm_history, adj_parameters_count, other_algorithm_count, kdb_update_count)
+        next_iterative_state, algorithms_knowledge_db, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, algorithms_knowledge_db,
+                                                                                                                                                                     history, kdb_update_count, selected_algorithm, max_iterations, (config["general"]["learning_type"] == "supervised"))
 
-        previous_results = results
+        history[iteration]["algorithm"] = selected_algorithm
+        history[iteration]["parameters"] = algorithm_parameters
+        history[iteration]["results"] = results
 
-        if stop_csms:
+        if next_decided_algorithm != None and iteration != (max_iterations - 1):
+            selected_algorithm = next_decided_algorithm
+
+        if overall_best_algorithms_parameters != None:
+            algorithm_parameters = overall_best_algorithms_parameters
+            selected_algorithm = next_decided_algorithm
+
+        if next_iterative_state == "stop":
             break
 
     # TODO:
@@ -109,10 +121,15 @@ if setup_result == {}:
 else:
     pass
 
+print("\n-*- Running final decision of algorithm \"" + selected_algorithm + "\" with parameters: " + str(algorithm_parameters))
+
 end_results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, 0,
                                            (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"], sampling=False)
 
-print("-*- Got final accuracy of " + str(end_results["accuracy"]) + " for \"" + selected_algorithm + "\" with parameters " + str(algorithm_parameters))
+if config["general"]["learning_type"] == "supervised":
+    print(f"-*- Got final accuracy of {end_results['accuracy']:.4f}\n")
+else:
+    print("-*- Got final evaluation results: TODO\n")  # TODO
 
 # TODO: write results / steps / documentation into report
 pass

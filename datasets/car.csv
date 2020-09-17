@@ -1,4 +1,4 @@
-buying: categorial;maint: categorial;doors: categorial;persons: categorial;lug_boot: categorial;safety: categorial;class: categorial
+buying: categorical;maint: categorical;doors: numerical;persons: numerical;lug_boot: categorical;safety: categorical;class: categorical
 vhigh;vhigh;2;2;small;low;unacc
 vhigh;vhigh;2;2;small;med;unacc
 vhigh;vhigh;2;2;small;high;unacc

@@ -4,5 +4,6 @@
 # PyCharm
 venv
 .idea
+__pychache__
 
 # Misc

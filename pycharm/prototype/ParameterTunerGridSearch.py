@@ -137,7 +137,7 @@ def grid_search_further_parameters(algorithm, initial_parameters, grid_search_me
         merged_parameters = {**parameters_to_evaluate, **initial_parameters}
         result = generate_and_evaluate_program(algorithm, merged_parameters, dataset, sample_size, supervised, class_column, sampling=True)
 
-        print("[Parameter Tuner] Tested parameters " + str(parameters_to_evaluate) + " for \"" + algorithm + "\" and got accuracy of " + str(result["accuracy"]))
+        print("[Parameter Tuner] Tested parameters " + str(parameters_to_evaluate) + " for \"" + algorithm + f"\" and got accuracy of {result['accuracy']:.4f}")
 
         if not supervised:
             # TODO
@@ -264,19 +264,19 @@ def tune_parameters(algorithm, metadata, hardware, configuration_parameters, lea
             },
             "radius_neighbors": {
                 "radius": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
+                    "min_boundary": 10,
+                    "max_boundary": 10000000,
+                    "step_value": 5,
+                    "step_distance_strategy": "exponential"
                 },
                 "distance": {}
             },
             "nca": {
                 "k": {
-                    "min_boundary": 10000.0,
-                    "max_boundary": 10000000.0,
-                    "step_value": 5,
-                    "step_distance_strategy": "exponential"
+                    "min_boundary": 2,
+                    "max_boundary": 10,
+                    "step_value": 1,
+                    "step_distance_strategy": "equal"
                 },
                 "distance": {}
             },
