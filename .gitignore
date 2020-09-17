@@ -3,7 +3,7 @@
 
 # PyCharm
 venv/
-.idea/
+/.idea/
 __pychache__/
 
 # Misc
