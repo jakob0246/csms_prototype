@@ -95,7 +95,7 @@ def decide_iterative_step(main_iteration, evaluation_results, algorithm_scores, 
             updated_kdb = True
         else:
             next_iterative_state = "parameter_tuning"
-            decided_algorithm = determine_next_best_algorithm(history[main_iteration - 1]["algorithm"], algorithm_scores)
+            decided_algorithm = determine_next_best_algorithm(old_selected_algorithm, algorithm_scores)
             selected_next_best_algorithm = True
 
     new_history_element = {

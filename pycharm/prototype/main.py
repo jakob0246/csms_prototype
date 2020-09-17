@@ -14,6 +14,11 @@ from KDBSetupManager import check_for_setup_in_knowledge_db, write_setup_to_know
 from DataClusterer import prepare_for_clustering, automatic_selection, unsupervised_clustering, supervised_learning_using_clustering
 
 
+supported_algorithms = {
+    "unsupervised": {"kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm"},  # TODO: "dbscan"
+    "supervised": {"knn", "svc", "nearest_centroid", "radius_neighbors", "nca", "svc_sgd"}
+}
+
 # get parameters from config.txt
 config = get_configuration()
 
@@ -52,9 +57,11 @@ configuration_parameters = config["system_parameters"]
 setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], hardware_specs, configuration_parameters,
                                                config["general"]["learning_type"])
 
+remaining_algorithms_set = supported_algorithms[config["general"]["learning_type"]]
+
 if setup_result == {}:
     # TODO: check for constraints
-    max_iterations = 10  # 1
+    max_iterations = len(remaining_algorithms_set)  # TODO
     speedup_multiplier = 10
     sample_size = 100  # 50, 1000
 
@@ -70,16 +77,13 @@ if setup_result == {}:
 
         # select algorithm:
         if next_iterative_state == "algorithm_selection":
-            selected_algorithm, algorithm_scores, algorithms_knowledge_db = select_algorithm(profiled_metadata, hardware_specs, configuration_parameters,
+            selected_algorithm, algorithm_scores, algorithms_knowledge_db = select_algorithm(remaining_algorithms_set, profiled_metadata, hardware_specs, configuration_parameters,
                                                                                              algorithms_knowledge_db, supervised=(config["general"]["learning_type"] == "supervised"))
 
             if iteration == 0 or (iteration != 0 and selected_algorithm != history[iteration - 1]["algorithm"]):
                 next_iterative_state = "parameter_tuning"
             else:
                 next_iterative_state = "program_generation_and_evaluation"
-
-            if iteration != 0 and history[iteration - 1]["updated_kdb"]:
-                next_iterative_state = "decide_iterative_step"
 
         # tune parameters:
         if next_iterative_state == "parameter_tuning":
@@ -98,12 +102,18 @@ if setup_result == {}:
                 # TODO
                 pass
 
+            remaining_algorithms_set -= {selected_algorithm}
+
         next_iterative_state, algorithms_knowledge_db, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, algorithms_knowledge_db,
                                                                                                                                                                      history, kdb_update_count, selected_algorithm, max_iterations, (config["general"]["learning_type"] == "supervised"))
+
+        if iteration != 0 and history[iteration]["selected_next_best_algorithm"]:
+            algorithm_scores.pop(selected_algorithm)
 
         history[iteration]["algorithm"] = selected_algorithm
         history[iteration]["parameters"] = algorithm_parameters
         history[iteration]["results"] = results
+        history[iteration]["algorithm_scores"] = algorithm_scores
 
         if next_decided_algorithm != None and iteration != (max_iterations - 1):
             selected_algorithm = next_decided_algorithm
@@ -112,7 +122,7 @@ if setup_result == {}:
             algorithm_parameters = overall_best_algorithms_parameters
             selected_algorithm = next_decided_algorithm
 
-        if next_iterative_state == "stop":
+        if next_iterative_state == "stop" or len(remaining_algorithms_set) == 0:
             break
 
     # TODO:

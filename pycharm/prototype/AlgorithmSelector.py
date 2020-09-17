@@ -45,19 +45,15 @@ def select_algorithm_csv(metadata, hardware, configuration_parameters, supported
     return best_selection
 
 
-def select_algorithm(metadata, hardware, configuration_parameters, knowledge_db, supervised=False):
+def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters, knowledge_db, supervised=False):
     if not supervised:
         metadata_attributes = ["outlier_percentage", "n_rows", "n_features", "normal_distribution_percentage"]
         hardware_attributes = []
         configuration_attributes = ["efficient", "accurate"]
-
-        supported_algorithms = ["kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm"]  # TODO: "dbscan"
     else:
         metadata_attributes = ["outlier_percentage", "n_rows", "n_features", "normal_distribution_percentage"]
         hardware_attributes = []
         configuration_attributes = ["efficient_trainingtime", "accurate_trainingtime", "efficient_testtime", "accurate_testtime"]
-
-        supported_algorithms = ["knn", "svc", "nearest_centroid", "radius_neighbors", "nca", "svc_sgd"]
 
     threshold_stepsize = 0.5  # TODO: user-param. or integration into KDB ?
 
@@ -69,9 +65,9 @@ def select_algorithm(metadata, hardware, configuration_parameters, knowledge_db,
     decision_rules = knowledge_db["decision_rules"]  # list(map(lambda x: {x["algorithm"]: x["attribute"]}, knowledge_db["decision_rules"]))
 
     # get selection regarding metadata and hardware
-    algorithm_scores = dict(list(map(lambda x: [x, 0], supported_algorithms)))
+    algorithm_scores = dict(list(map(lambda x: [x, 0], algorithm_set)))
     for rule in decision_rules:
-        if rule["algorithm"] in supported_algorithms:
+        if rule["algorithm"] in algorithm_set:
             datasets_metadata_value = metadata[rule["attribute"]]
 
             factor = 0
