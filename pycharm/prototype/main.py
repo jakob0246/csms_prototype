@@ -121,7 +121,7 @@ if setup_result == {}:
 else:
     pass
 
-print("\n-*- Running final decision of algorithm \"" + selected_algorithm + "\" with parameters: " + str(algorithm_parameters))
+print("\n-*- Running final decision of algorithm \"" + selected_algorithm + "\" with parameters: " + str(algorithm_parameters) + " ...")
 
 end_results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, 0,
                                            (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"], sampling=False)
