@@ -1,0 +1,3 @@
+#!/Users/jakobludwig/Documents/Uni/8_SoSe_20/1_Bachelorarbeit/Implementation/Sandbox/Prototype/pycharm/prototype/venv/bin/python
+from numba.pycc import main
+main()
