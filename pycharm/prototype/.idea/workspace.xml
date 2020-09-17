@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c127d9ef-b421-42f3-b98b-a3d6aaff89df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IterativeStepDecider.py" beforeDir="false" afterPath="$PROJECT_DIR$/IterativeStepDecider.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IterativeStepDeciderSimplified.py" beforeDir="false" afterPath="$PROJECT_DIR$/IterativeStepDeciderDeprecated.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ParameterTunerGridSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/ParameterTunerGridSearch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/config.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="c127d9ef-b421-42f3-b98b-a3d6aaff89df" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
