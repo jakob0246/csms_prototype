@@ -6,6 +6,7 @@
 [general]
 learning_type: supervised
 feature_scaling_and_normalization: quantile
+speedup_multiplier = 5
 
 # configure parameters about the dataset here
 #   - arff and csv files are supported

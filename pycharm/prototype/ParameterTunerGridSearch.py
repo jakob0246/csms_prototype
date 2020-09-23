@@ -11,7 +11,20 @@ from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 
 
 def read_in_knowledge_db_json():
+    # TODO: check structure
+
     path = "./KnowledgeDatabases/DecisionRules/KDBDistanceMetrics.json"
+
+    file = open(path)
+    json_data = json.load(file)
+
+    return json_data
+
+
+def read_in_hyper_parameter_config():
+    # TODO: check structure
+
+    path = "Configs/HyperParameterConfig.json"
 
     file = open(path)
     json_data = json.load(file)
@@ -176,113 +189,7 @@ def tune_parameters(algorithm, metadata, hardware, configuration_parameters, lea
     }
 
     # TODO: in user configuration file & constraints for it
-    grid_search_meta_parameters = {
-        "unsupervised": {
-            "kmeans": {
-                "n_clusters": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                }
-            },
-            "em": {
-                "n_clusters": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                }
-            },
-            "spectral": {
-                "n_clusters": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                }
-            },
-            "dbscan": {
-                "min_samples": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                },
-                "epsilon": {
-                    "min_boundary": 10000.0,
-                    "max_boundary": 10000000.0,
-                    "step_value": 5,
-                    "step_distance_strategy": "exponential"
-                },
-                "distance": {}
-            },
-            "optics": {
-                "min_samples": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                },
-                "distance": {}
-            },
-            "meanshift": {},
-            "agglomerative": {
-                "n_clusters": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                },
-                "distance": {}
-            },
-            "affinity": {},
-            "vbgmm": {
-                "max_n_components": {}
-            }
-        },
-        "supervised": {
-            "knn": {
-                "k": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                },
-                "distance": {}
-            },
-            "svc": {
-                "degree": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                }
-            },
-            "nearest_centroid": {
-                "distance": {}
-            },
-            "radius_neighbors": {
-                "radius": {
-                    "min_boundary": 10,
-                    "max_boundary": 10000000,
-                    "step_value": 5,
-                    "step_distance_strategy": "exponential"
-                },
-                "distance": {}
-            },
-            "nca": {
-                "k": {
-                    "min_boundary": 2,
-                    "max_boundary": 10,
-                    "step_value": 1,
-                    "step_distance_strategy": "equal"
-                },
-                "distance": {}
-            },
-            "svc_sgd": {}
-        }
-    }
+    grid_search_meta_parameters = read_in_hyper_parameter_config()
 
     initial_parameters = {}
 

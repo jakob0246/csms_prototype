@@ -1,13 +1,13 @@
 import configparser
 
 
-def parse_config(path: str = "config.txt") -> dict:
+def parse_config(path: str = "Configs/config.txt") -> dict:
     parser_config = configparser.ConfigParser()
     parser_config.read(path)
 
     # TODO: exception handling
     assumed_metastructure = {
-        "general": ["learning_type", "feature_scaling_and_normalization"],
+        "general": ["learning_type", "feature_scaling_and_normalization", "speedup_multiplier"],
         "dataset": ["file_path", "numeric_categoricals", "class", "csv_delimiter", "missing_values"],
         "feature_selection": ["type", "features"],
         "system_parameters": ["accuracy_efficiency_preference", "find_arbitrary_cluster_shapes", "find_arbitrary_cluster_shapes",
@@ -56,6 +56,7 @@ def get_configuration() -> dict:
     config_dict["dataset"]["numeric_categoricals"] = list(map(lambda ele: ele.strip(), config_dict["dataset"]["numeric_categoricals"].split(",")))
 
     config_dict["test_parameters"]["show_clusterings"] = config_dict["test_parameters"]["show_clusterings"] == "true"
+    config_dict["general"]["speedup_multiplier"] = int(config_dict["general"]["speedup_multiplier"])
 
     config_dict["dataset"]["csv_delimiter"] = config_dict["dataset"]["csv_delimiter"][1]
 

@@ -3,13 +3,17 @@ from DataIntegrator import read_in_data
 from DataPreprocessor import user_feature_selection, initial_preprocessing, prepare_for_unsupervised_learning, \
                              prepare_for_supervised_learning, clean_dataset, scale_and_normalize_features, further_preprocessing
 from FeatureSelector import simple_automatic_feature_selection
+
 from DataProfiler import profile_data
 from HardwareReader import get_hardware_specs
+
 from AlgorithmSelector import select_algorithm_csv, select_algorithm
 from ParameterTunerGridSearch import tune_parameters
 from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 from IterativeStepDecider import decide_iterative_step
 from KDBSetupManager import check_for_setup_in_knowledge_db, write_setup_to_knowledge_db
+
+from RuntimeConstrainer import *
 
 
 supported_algorithms = {
@@ -59,9 +63,8 @@ remaining_algorithms_set = supported_algorithms[config["general"]["learning_type
 
 if setup_result == {}:
     # TODO: check for constraints
-    max_iterations = len(remaining_algorithms_set)  # TODO
-    speedup_multiplier = 10
-    sample_size = 100  # 50, 1000
+    sample_size = determine_sample_size(dataset.shape[0])  # 50, 100, 1000
+    max_iterations = determine_max_iterations(sample_size, config["general"]["speedup_multiplier"], len(remaining_algorithms_set), dataset.shape[0], config["general"]["learning_type"])  # TODO
 
     algorithm = None
     algorithm_parameters = {}
@@ -71,7 +74,7 @@ if setup_result == {}:
     kdb_update_count = 0
     algorithms_knowledge_db = {}
     for iteration in range(max_iterations):
-        print(f"\nRunning Iteration [{iteration + 1}] ...")
+        print(f"\nRunning Iteration [{iteration + 1} / {max_iterations}] ...")
 
         # select algorithm:
         if next_iterative_state == "algorithm_selection":
@@ -94,7 +97,7 @@ if setup_result == {}:
             results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, sample_size, (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"])
 
             if config["general"]["learning_type"] == "supervised":
-                print(" -> Results Iteration [" + str(iteration + 1) + f"]: Got accuracy of {results['accuracy']:.4f} for \"" +
+                print(f" -> Results Iteration [{iteration + 1} / {max_iterations}]: Got accuracy of {results['accuracy']:.4f} for \"" +
                       selected_algorithm + f"\" (score of {algorithm_scores[selected_algorithm]}) with parameters: " + str(algorithm_parameters))
             else:
                 # TODO
