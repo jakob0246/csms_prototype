@@ -29,7 +29,7 @@ def determine_normal_distributions(dataframe):
 
 
 def determine_outliers(dataframe):
-    classifier = LocalOutlierFactor()
+    classifier = LocalOutlierFactor(algorithm="kd_tree")
     y_pred = classifier.fit_predict(dataframe)
     n_outliers = np.unique(y_pred, return_counts=True)[1][0]
 
@@ -49,13 +49,6 @@ def profile_data(dataframe_intitial, dataframe, class_column, supervised):
     if supervised:
         dataframe_missing_class = dataframe_missing_class.drop(columns=[class_column])
         dataframe_initial_missing_class = dataframe_initial_missing_class.drop(columns=[class_column])
-
-    # describe
-    pandas_data_profile_num = dataframe_initial_missing_class.describe()
-
-    pandas_data_profile_cat = pd.DataFrame()
-    if not dataframe_initial_missing_class.select_dtypes(include=['category']).empty:
-        pandas_data_profile_cat = dataframe_initial_missing_class.describe(include=["category"])
 
     # get outliers:
     n_outliers = determine_outliers(dataframe_missing_class)
@@ -81,18 +74,8 @@ def profile_data(dataframe_intitial, dataframe, class_column, supervised):
         "nmissing_values": pd.Series(((np.ones(dataframe_initial_missing_class.shape[1]) * dataframe_initial_missing_class.shape[0]) - dataframe_initial_missing_class.count().values).astype(int), index=dataframe_initial_missing_class.columns),
         "correlation": dataframe_missing_class.corr(),
         "covariance": dataframe_missing_class.cov(),
-        "min": pandas_data_profile_num.T["min"].copy(),
-        "max": pandas_data_profile_num.T["max"].copy(),
-        "mean": pandas_data_profile_num.T["mean"].copy(),
-        "std_deviation": pandas_data_profile_num.T["std"].copy(),
-        "25_percentile": pandas_data_profile_num.T["25%"].copy(),
-        "50_percentile": pandas_data_profile_num.T["50%"].copy(),
-        "75_percentile": pandas_data_profile_num.T["75%"].copy(),
-        "unique": None if pandas_data_profile_cat.empty else pandas_data_profile_cat.T["unique"].copy(),
-        "top": None if pandas_data_profile_cat.empty else pandas_data_profile_cat.T["top"].copy(),
-        "freq": None if pandas_data_profile_cat.empty else pandas_data_profile_cat.T["freq"].copy(),
         "outlier_percentage": n_outliers / dataframe_missing_class.shape[0],
-        "normal_distribution_percentage": sum(distributions[1, ...]) / dataframe_missing_class.shape[1],
+        "normal_distribution_percentage": (sum(distributions[1, ...]) / dataframe_missing_class.shape[1]) if len(distributions) != 0 else 0,
         "high_correlation_percentage": correlation_percentage
 
         # TODO

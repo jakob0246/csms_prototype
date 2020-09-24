@@ -6,4 +6,8 @@ venv/
 .idea/
 __pycache__/
 
+# Specific datasets
+connect-4.csv
+covtype.csv
+
 # Misc

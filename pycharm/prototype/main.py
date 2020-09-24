@@ -57,7 +57,7 @@ if config["general"]["feature_scaling_and_normalization"] != "":
                                            config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))  # TODO: how to treat supervised case?
 
 # get all data the clustering selection part and parameter tuning part will exploit
-profiled_metadata = profile_data(dataset_initial, dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))  # TODO
+profiled_metadata = profile_data(dataset_initial, dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
 hardware_specs = get_hardware_specs()
 configuration_parameters = config["system_parameters"]
 
