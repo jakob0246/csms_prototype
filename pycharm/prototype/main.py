@@ -1,3 +1,5 @@
+import time
+
 from Configurator import get_configuration
 from DataIntegrator import read_in_data
 from DataPreprocessor import user_feature_selection, initial_preprocessing, prepare_for_unsupervised_learning, \
@@ -16,6 +18,10 @@ from KDBSetupManager import check_for_setup_in_knowledge_db, write_setup_to_know
 from RuntimeConstrainer import *
 
 
+# if runtime needs to be measured
+cputime_start = time.process_time()
+
+# lists all supported algorithms
 supported_algorithms = {
     "unsupervised": {"kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm"},  # TODO: "dbscan"
     "supervised": {"knn", "svc", "nearest_centroid", "radius_neighbors", "nca", "svc_sgd"}
@@ -62,9 +68,8 @@ setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], h
 remaining_algorithms_set = supported_algorithms[config["general"]["learning_type"]]
 
 if setup_result == {}:
-    # TODO: check for constraints
-    sample_size = determine_sample_size(dataset.shape[0])  # 50, 100, 1000
-    max_iterations = determine_max_iterations(sample_size, config["general"]["speedup_multiplier"], len(remaining_algorithms_set), dataset.shape[0], config["general"]["learning_type"])  # TODO
+    sample_size = determine_sample_size(dataset.shape[0])
+    max_iterations = determine_max_iterations(sample_size, config["general"]["speedup_multiplier"], len(remaining_algorithms_set), dataset.shape[0], config["general"]["learning_type"])
 
     algorithm = None
     algorithm_parameters = {}
@@ -140,7 +145,11 @@ end_results = generate_and_evaluate_program(selected_algorithm, algorithm_parame
 if config["general"]["learning_type"] == "supervised":
     print(f"-*- Got final accuracy of {end_results['accuracy']:.4f}\n")
 else:
-    print("-*- Got final evaluation results: TODO\n")  # TODO
+    print("-*- Got final evaluation results: TODO \n")  # TODO: unsupervised case
+
+cputime_end = time.process_time()
+if config["general"]["measure_runtime"]:
+    print(f"-*- All in all took {cputime_end - cputime_start:.4f}s (CPU time)")
 
 # TODO: write results / steps / documentation into report
 pass

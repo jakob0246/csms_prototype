@@ -22,13 +22,8 @@ def determine_normal_distributions(dataframe):
     for i, column_name in enumerate(dataframe.columns):
         column = np.array(dataframe[column_name])
 
-        # statistics, p = shapiro(column)
-        # results_array[0, i] = p > alpha
-
         statistics, p = normaltest(column)
         results_array[i] = p > alpha
-
-    # results_dataframe = pd.DataFrame(results_array, columns=dataframe.columns, index=["shapiro", "d_agostino"])
 
     return results_array
 
