@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 import json
 
@@ -45,6 +46,18 @@ def select_algorithm_csv(metadata, hardware, configuration_parameters, supported
     return best_selection
 
 
+def normalize_algorithm_scores(algorithm_scores, knowledge_db):
+    number_of_decision_rules = len(knowledge_db["decision_rules"])
+
+    for (key, value) in algorithm_scores.items():
+        number_of_algorithm_rules = np.sum(np.array(list(map(lambda x: x["algorithm"], knowledge_db["decision_rules"]))) == key)
+        number_of_other_algorithm_rules = number_of_decision_rules - number_of_algorithm_rules
+
+        algorithm_scores[key] = value * ((number_of_other_algorithm_rules) / number_of_decision_rules)
+
+    return algorithm_scores
+
+
 def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters, knowledge_db, supervised=False):
     if not supervised:
         metadata_attributes = ["outlier_percentage", "n_rows", "n_features", "normal_distribution_percentage"]
@@ -84,7 +97,11 @@ def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters
 
     # TODO: take configuration_parameters into consideration
 
+    # normalize algorithm_scores
+    algorithm_scores = normalize_algorithm_scores(algorithm_scores, knowledge_db)
+
     algorithm_scores_list = list(zip(algorithm_scores.keys(), algorithm_scores.values()))
+
     best_selection = max(algorithm_scores_list, key=lambda x: x[1])
 
     return best_selection[0], algorithm_scores, knowledge_db

@@ -9,11 +9,11 @@
     "threshold_borders": [
         {
             "attribute": "n_rows",
-            "borders": [1000, 10000, 1000000]
+            "borders": [1000, 5000, 30000]
         },
         {
             "attribute": "n_features",
-            "borders": [10, 100, 1000]
+            "borders": [30, 100, 500]
         },
         {
             "attribute": "outlier_percentage",

@@ -103,7 +103,7 @@ if setup_result == {}:
 
             if config["general"]["learning_type"] == "supervised":
                 print(f" -> Results Iteration [{iteration + 1} / {max_iterations}]: Got accuracy of {results['accuracy']:.4f} for \"" +
-                      selected_algorithm + f"\" (score of {algorithm_scores[selected_algorithm]}) with parameters: " + str(algorithm_parameters))
+                      selected_algorithm + f"\" (score of {algorithm_scores[selected_algorithm]:.4f}) with parameters: " + str(algorithm_parameters))
             else:
                 # TODO
                 pass

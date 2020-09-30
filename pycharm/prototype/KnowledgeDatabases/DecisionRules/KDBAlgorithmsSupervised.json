@@ -9,11 +9,11 @@
     "threshold_borders": [
         {
             "attribute": "n_rows",
-            "borders": [1000, 10000, 1000000]
+            "borders": [1000, 5000, 30000]
         },
         {
             "attribute": "n_features",
-            "borders": [10, 100, 1000]
+            "borders": [30, 100, 500]
         },
         {
             "attribute": "outlier_percentage",
@@ -34,12 +34,44 @@
             "algorithm": "knn"
         },
         {
-            "attribute": "normal_distribution_percentage",
+            "attribute": "high_correlation_percentage",
             "algorithm": "knn"
         },
         {
-            "attribute": "n_rows",
+            "attribute": "n_features",
             "algorithm": "svc"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "nearest_centroid"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "nca"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "nca"
         }
     ]
 }
