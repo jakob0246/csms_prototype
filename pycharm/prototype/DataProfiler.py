@@ -29,9 +29,19 @@ def determine_normal_distributions(dataframe):
 
 
 def determine_outliers(dataframe):
+    # use sampling (of size sqrt(number of rows)) if dataframe is too big (> 10000 rows):
+    sampling = False
+    if dataframe.shape[0] > 10000:
+        dataframe = dataframe.sample(n=int(dataframe.shape[0] ** (1 / 2)))
+        sampling = True
+
     classifier = LocalOutlierFactor(algorithm="kd_tree")
     y_pred = classifier.fit_predict(dataframe)
     n_outliers = np.unique(y_pred, return_counts=True)[1][0]
+
+    # normalze number of outliers to dataframe size, to have an equal comparison
+    if sampling:
+        n_outliers ** 2
 
     return n_outliers
 
