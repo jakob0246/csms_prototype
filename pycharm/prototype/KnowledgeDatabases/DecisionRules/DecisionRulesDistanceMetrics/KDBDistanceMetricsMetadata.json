@@ -2,13 +2,12 @@
     "weights": {
         "n_features": 2,
         "outlier_percentage": 1.5,
-        "high_correlation_percentage": 1,
-        "high_variance": 1
+        "high_correlation_percentage": 1
     },
     "threshold_borders": [
         {
             "attribute": "n_features",
-            "borders": [10, 100, 1000]
+            "borders": [30, 100, 500]
         },
         {
             "attribute": "outlier_percentage",
@@ -17,20 +16,28 @@
         {
             "attribute": "high_correlation_percentage",
             "borders": [0.2, 0.4, 0.6]
-        },
-        {
-            "attribute": "high_variance",
-            "borders": [10, 100, 1000]
         }
     ],
     "decision_rules": [
         {
             "attribute": "n_features",
-            "metric": "euclidean"
+            "metric": "fractional"
         },
         {
             "attribute": "outlier_percentage",
             "metric": "cosine"
+        },
+        {
+            "attribute": "n_features",
+            "metric": "cosine"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "metric": "mahalanobis"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "metric": "canberra"
         }
     ]
 }

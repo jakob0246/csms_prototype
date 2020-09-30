@@ -13,7 +13,11 @@ from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 def read_in_knowledge_db_json():
     # TODO: check structure
 
-    path = "./KnowledgeDatabases/DecisionRules/KDBDistanceMetrics.json"
+    # information about deriving decision rules from the thesis:
+    # - added decision rule for "n_features" if "scalability regarding number of dimensions" was "high" or "very high"
+    # - left out much variance, since it can't be computed in a comparative way
+
+    path = "KnowledgeDatabases/DecisionRules/DecisionRulesDistanceMetrics/KDBDistanceMetricsMetadata.json"
 
     file = open(path)
     json_data = json.load(file)
@@ -32,6 +36,18 @@ def read_in_hyper_parameter_config():
     return json_data
 
 
+def normalize_metric_scores(metric_scores, knowledge_db):
+    number_of_decision_rules = len(knowledge_db["decision_rules"])
+
+    for (key, value) in metric_scores.items():
+        number_of_algorithm_rules = np.sum(np.array(list(map(lambda x: x["metric"], knowledge_db["decision_rules"]))) == key)
+        number_of_other_algorithm_rules = number_of_decision_rules - number_of_algorithm_rules
+
+        metric_scores[key] = value * ((number_of_other_algorithm_rules) / number_of_decision_rules)
+
+    return metric_scores
+
+
 def select_distance_metric_from_kdb(metadata, hardware, configuration_parameters, distance_metrics):
     threshold_stepsize = 0.5  # TODO: user-param. or integration into KDB ?
 
@@ -42,9 +58,9 @@ def select_distance_metric_from_kdb(metadata, hardware, configuration_parameters
     decision_rules = knowledge_db["decision_rules"]
 
     # get selection regarding metadata and hardware
-    algorithm_scores = dict(list(map(lambda x: [x, 0], distance_metrics)))
+    metric_scores = dict(list(map(lambda x: [x, 0], distance_metrics)))
     for rule in decision_rules:
-        if rule["metric"] in algorithm_scores.keys():
+        if rule["metric"] in metric_scores.keys():
             datasets_metadata_value = metadata[rule["attribute"]]
 
             factor = 0
@@ -57,15 +73,17 @@ def select_distance_metric_from_kdb(metadata, hardware, configuration_parameters
                 else:
                     break
 
-            algorithm_scores[rule["metric"]] += weights[rule["attribute"]] * factor
+            metric_scores[rule["metric"]] += weights[rule["attribute"]] * factor
 
     # TODO: take configuration_parameters into consideration
 
-    algorithm_scores_list = list(zip(algorithm_scores.keys(), algorithm_scores.values()))
+    metric_scores = normalize_metric_scores(metric_scores, knowledge_db)
 
-    scores_sum = reduce(lambda a, b: a + b, list(algorithm_scores.values()))
+    metric_scores_list = list(zip(metric_scores.keys(), metric_scores.values()))
+
+    scores_sum = reduce(lambda a, b: a + b, list(metric_scores.values()))
     if scores_sum != 0:
-        best_selection = max(algorithm_scores_list, key=lambda x: x[1])[0]
+        best_selection = max(metric_scores_list, key=lambda x: x[1])[0]
     else:
         print(f"{Fore.YELLOW}[Parameter Tuner] <Warning> Selected arbitrary distance metric, because the evaluation of all decision rules and algorithms was 0.{Style.RESET_ALL}")
         best_selection = distance_metrics[0]

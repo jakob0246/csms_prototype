@@ -9,7 +9,7 @@ def tune_k():
 
 
 def read_in_knowledge_db_json():
-    path = "./KnowledgeDatabases/DecisionRules/KDBDistanceMetrics.json"
+    path = "KnowledgeDatabases/DecisionRules/DecisionRulesDistanceMetrics/KDBDistanceMetricsMetadata.json"
 
     file = open(path)
     json_data = json.load(file)

@@ -10,8 +10,8 @@ def parse_config(path: str = "Configs/config.txt") -> dict:
         "general": ["learning_type", "feature_scaling_and_normalization", "speedup_multiplier", "measure_runtime"],
         "dataset": ["file_path", "numeric_categoricals", "class", "csv_delimiter", "missing_values"],
         "feature_selection": ["type", "features"],
-        "system_parameters": ["accuracy_efficiency_preference", "find_arbitrary_cluster_shapes", "find_arbitrary_cluster_shapes",
-                              "avoid_high_effort_of_hyper_parameter_tuning"],
+        "system_parameters": ["accuracy_efficiency_preference", "prefer_finding_arbitrary_cluster_shapes", "avoid_high_effort_of_hyper_parameter_tuning"],
+        "system_parameter_preferences_distance": ["find_compact_or_isolated_clusters", "ignore_magnitude_and_rotation", "measure_distribution_differences", "grid_based_distance"],
         "test_parameters": ["use_categorial_encoding", "show_clusterings"]
     }
 
@@ -57,6 +57,11 @@ def get_configuration() -> dict:
 
     config_dict["test_parameters"]["show_clusterings"] = config_dict["test_parameters"]["show_clusterings"] == "true"
     config_dict["general"]["measure_runtime"] = config_dict["general"]["measure_runtime"] == "true"
+
+    config_dict["system_parameter_preferences_distance"]["find_compact_or_isolated_clusters"] = config_dict["system_parameter_preferences_distance"]["find_compact_or_isolated_clusters"] == "true"
+    config_dict["system_parameter_preferences_distance"]["ignore_magnitude_and_rotation"] = config_dict["system_parameter_preferences_distance"]["ignore_magnitude_and_rotation"] == "true"
+    config_dict["system_parameter_preferences_distance"]["measure_distribution_differences"] = config_dict["system_parameter_preferences_distance"]["measure_distribution_differences"] == "true"
+    config_dict["system_parameter_preferences_distance"]["grid_based_distance"] = config_dict["system_parameter_preferences_distance"]["grid_based_distance"] == "true"
 
     config_dict["general"]["speedup_multiplier"] = int(config_dict["general"]["speedup_multiplier"])
 

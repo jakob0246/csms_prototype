@@ -13,10 +13,15 @@ def read_in_knowledge_db_csv(path="./KnowledgeDatabases/KnowledgeDatabaseUnsuper
 
 
 def read_in_knowledge_db_algorithms(supervised):
+
+    # information about deriving decision rules from the thesis:
+    # - added decision rule for "high_efficiency" if training and test time was true for supervised algorithms
+    # - added decision rule for "medium_to_high_accuracy" if accuracy was "medium" or "high"
+
     if not supervised:
-        path = "KnowledgeDatabases/DecisionRules/KDBAlgorithmsUnsupervised.json"
+        path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataUnsupervised.json"
     else:
-        path = "KnowledgeDatabases/DecisionRules/KDBAlgorithmsSupervised.json"
+        path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataSupervised.json"
 
     file = open(path)
     json_data = json.load(file)
