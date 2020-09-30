@@ -10,14 +10,17 @@ from colorama import Style
 from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 
 
-def read_in_knowledge_db_json():
+def read_in_knowledge_db_json(get_metadata_kdb):
     # TODO: check structure
 
     # information about deriving decision rules from the thesis:
     # - added decision rule for "n_features" if "scalability regarding number of dimensions" was "high" or "very high"
     # - left out much variance, since it can't be computed in a comparative way
 
-    path = "KnowledgeDatabases/DecisionRules/DecisionRulesDistanceMetrics/KDBDistanceMetricsMetadata.json"
+    if get_metadata_kdb:
+        path = "KnowledgeDatabases/DecisionRules/DecisionRulesDistanceMetrics/KDBDistanceMetricsMetadata.json"
+    else:
+        path = "KnowledgeDatabases/DecisionRules/DecisionRulesDistanceMetrics/KDBDistanceMetricsUserParams.json"
 
     file = open(path)
     json_data = json.load(file)
@@ -48,14 +51,15 @@ def normalize_metric_scores(metric_scores, knowledge_db):
     return metric_scores
 
 
-def select_distance_metric_from_kdb(metadata, hardware, configuration_parameters, distance_metrics):
-    threshold_stepsize = 0.5  # TODO: user-param. or integration into KDB ?
+def derive_scores_from_metadata(metadata, distance_metrics):
+    knowledge_db_metadata = read_in_knowledge_db_json(True)
 
-    knowledge_db = read_in_knowledge_db_json()
+    # can be modified for testing purposes
+    threshold_stepsize = 0.5
 
-    weights = knowledge_db["weights"]
-    thresholds = dict(list(map(lambda x: [x["attribute"], x["borders"]], knowledge_db["threshold_borders"])))
-    decision_rules = knowledge_db["decision_rules"]
+    weights = knowledge_db_metadata["weights"]
+    thresholds = dict(list(map(lambda x: [x["attribute"], x["borders"]], knowledge_db_metadata["threshold_borders"])))
+    decision_rules = knowledge_db_metadata["decision_rules"]
 
     # get selection regarding metadata and hardware
     metric_scores = dict(list(map(lambda x: [x, 0], distance_metrics)))
@@ -75,13 +79,41 @@ def select_distance_metric_from_kdb(metadata, hardware, configuration_parameters
 
             metric_scores[rule["metric"]] += weights[rule["attribute"]] * factor
 
-    # TODO: take configuration_parameters into consideration
+    metric_scores = normalize_metric_scores(metric_scores, knowledge_db_metadata)
 
-    metric_scores = normalize_metric_scores(metric_scores, knowledge_db)
+    return metric_scores
 
-    metric_scores_list = list(zip(metric_scores.keys(), metric_scores.values()))
 
-    scores_sum = reduce(lambda a, b: a + b, list(metric_scores.values()))
+def change_scores_regarding_user_params(configuration_parameters, distance_metrics):
+    knowledge_db_params = read_in_knowledge_db_json(False)
+
+    weights = knowledge_db_params["weights"]
+    decision_rules = knowledge_db_params["decision_rules"]
+
+    metric_scores = dict(list(map(lambda x: [x, 0], distance_metrics)))
+    for rule in decision_rules:
+        if configuration_parameters["system_parameter_preferences_distance"][rule["attribute"]]:
+            metric_scores[rule["metric"]] += weights[rule["attribute"]]
+
+    # normalize algorithm_scores
+    metric_scores = normalize_metric_scores(metric_scores, knowledge_db_params)
+
+    return metric_scores
+
+
+def select_distance_metric_from_kdb(metadata, configuration_parameters, distance_metrics):
+    metric_scores_metadata = derive_scores_from_metadata(metadata, distance_metrics)
+    metric_scores_params_and_hardware = change_scores_regarding_user_params(configuration_parameters, distance_metrics)
+
+    # sum up metric_scores_metadata and metric_scores_params_and_hardware
+    metric_scores_total = metric_scores_metadata
+    for (metric, score) in metric_scores_params_and_hardware.items():
+        metric_scores_total[metric] += score
+
+    metric_scores_list = list(zip(metric_scores_total.keys(), metric_scores_total.values()))
+
+    # check whether all scores are 0, if yes print warning
+    scores_sum = reduce(lambda a, b: a + b, list(metric_scores_total.values()))
     if scores_sum != 0:
         best_selection = max(metric_scores_list, key=lambda x: x[1])[0]
     else:
@@ -91,7 +123,7 @@ def select_distance_metric_from_kdb(metadata, hardware, configuration_parameters
     return best_selection
 
 
-def select_distance_metric(metadata, hardware, configuration_parameters, algorithm):
+def select_distance_metric(metadata, configuration_parameters, algorithm):
     supported_distance_metrics = {
         "kmeans": ["euclidean"],
         "dbscan": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "cosine", "mahalanobis", "canberra", "jensen_shannon"],
@@ -103,10 +135,7 @@ def select_distance_metric(metadata, hardware, configuration_parameters, algorit
         "nca": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "mahalanobis", "canberra"]
     }
 
-    return select_distance_metric_from_kdb(metadata, hardware, configuration_parameters, supported_distance_metrics[algorithm])
-
-    # TODO: "Compact or isolated clusters" as system configuration parameter;
-    #       "Ignore Magnitude and Rotation", "Measure Distribution Differences", "Grid based distance" too ?
+    return select_distance_metric_from_kdb(metadata, configuration_parameters, supported_distance_metrics[algorithm])
 
 
 def derive_possible_parameters_equally(grid_search_meta_parameters):
@@ -182,8 +211,6 @@ def grid_search_further_parameters(algorithm, initial_parameters, grid_search_me
 
 
 def tune_parameters(algorithm, metadata, hardware, configuration_parameters, learning_type, dataset, class_column, sample_size):
-    # TODO
-
     all_parameters_to_tune = {
         "unsupervised": {
             "kmeans": ["n_clusters"],
@@ -212,7 +239,7 @@ def tune_parameters(algorithm, metadata, hardware, configuration_parameters, lea
     initial_parameters = {}
 
     if "distance" in all_parameters_to_tune[learning_type][algorithm]:
-        initial_parameters["distance"] = select_distance_metric(metadata, hardware, configuration_parameters, algorithm)
+        initial_parameters["distance"] = select_distance_metric(metadata, configuration_parameters, algorithm)
 
     grid_search_parameters_to_tune = set(all_parameters_to_tune[learning_type][algorithm]) - set(["distance"])  # TODO
     best_parameter_combination = grid_search_further_parameters(algorithm, initial_parameters, grid_search_meta_parameters[learning_type][algorithm],

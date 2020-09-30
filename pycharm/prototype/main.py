@@ -9,7 +9,7 @@ from FeatureSelector import simple_automatic_feature_selection
 from DataProfiler import profile_data
 from HardwareReader import get_hardware_specs
 
-from AlgorithmSelector import select_algorithm_csv, select_algorithm
+from AlgorithmSelector import select_algorithm
 from ParameterTunerGridSearch import tune_parameters
 from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 from IterativeStepDecider import decide_iterative_step
@@ -59,7 +59,10 @@ if config["general"]["feature_scaling_and_normalization"] != "":
 # get all data the clustering selection part and parameter tuning part will exploit
 profiled_metadata = profile_data(dataset_initial, dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
 hardware_specs = get_hardware_specs()
-configuration_parameters = config["system_parameters"]
+configuration_parameters = {
+    "system_parameters": config["system_parameters"],
+    "system_parameter_preferences_distance": config["system_parameter_preferences_distance"]
+}
 
 # check if the dataset already ran through the CSMS under this specific user configuration with this similar hardware
 setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], hardware_specs, configuration_parameters,
@@ -77,14 +80,14 @@ if setup_result == {}:
     next_iterative_state = "algorithm_selection"
     history = []
     kdb_update_count = 0
-    algorithms_knowledge_db = {}
+    knowledge_db_metadata = {}
     for iteration in range(max_iterations):
         print(f"\nRunning Iteration [{iteration + 1} / {max_iterations}] ...")
 
         # select algorithm:
         if next_iterative_state == "algorithm_selection":
-            selected_algorithm, algorithm_scores, algorithms_knowledge_db = select_algorithm(remaining_algorithms_set, profiled_metadata, hardware_specs, configuration_parameters,
-                                                                                             algorithms_knowledge_db, supervised=(config["general"]["learning_type"] == "supervised"))
+            selected_algorithm, algorithm_scores, knowledge_db_metadata = select_algorithm(remaining_algorithms_set, profiled_metadata, hardware_specs, configuration_parameters,
+                                                                                             knowledge_db_metadata, supervised=(config["general"]["learning_type"] == "supervised"))
 
             if iteration == 0 or (iteration != 0 and selected_algorithm != history[iteration - 1]["algorithm"]):
                 next_iterative_state = "parameter_tuning"
@@ -110,7 +113,7 @@ if setup_result == {}:
 
             remaining_algorithms_set -= {selected_algorithm}
 
-        next_iterative_state, algorithms_knowledge_db, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, algorithms_knowledge_db,
+        next_iterative_state, knowledge_db_metadata, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, knowledge_db_metadata,
                                                                                                                                                                      history, kdb_update_count, selected_algorithm, max_iterations, (config["general"]["learning_type"] == "supervised"))
 
         if iteration != 0 and history[iteration]["selected_next_best_algorithm"]:

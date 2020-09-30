@@ -1,6 +1,0 @@
-attribute;threshold;higher/smaller;algorithm;weight
-outlier_percentage;0.001;higher;kmeans;2
-normal_distribution_percentage;0.1;higher;em;1
-n_rows;1000;higher;kmeans;3
-n_features;10;higher;kmeans;3
-high_correlation_percentage;0.2;higher;em;1

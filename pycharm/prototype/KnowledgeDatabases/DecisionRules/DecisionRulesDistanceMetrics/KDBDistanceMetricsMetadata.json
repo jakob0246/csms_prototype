@@ -21,7 +21,7 @@
     "decision_rules": [
         {
             "attribute": "n_features",
-            "metric": "fractional"
+            "metric": "minkowski_fractional"
         },
         {
             "attribute": "outlier_percentage",

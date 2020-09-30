@@ -14,10 +14,6 @@
             "algorithm": "knn"
         },
         {
-            "attribute": "high_correlation_percentage",
-            "algorithm": "knn"
-        },
-        {
             "attribute": "medium_to_high_accuracy",
             "algorithm": "svc"
         },

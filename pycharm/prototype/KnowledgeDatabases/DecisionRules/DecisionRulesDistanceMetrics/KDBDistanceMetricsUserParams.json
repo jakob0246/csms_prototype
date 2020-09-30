@@ -20,7 +20,7 @@
         },
         {
             "attribute": "find_compact_or_isolated_clusters",
-            "metric": "fractional"
+            "metric": "minkowski_fractional"
         },
         {
             "attribute": "find_compact_or_isolated_clusters",

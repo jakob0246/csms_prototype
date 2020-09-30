@@ -58,6 +58,9 @@ def get_configuration() -> dict:
     config_dict["test_parameters"]["show_clusterings"] = config_dict["test_parameters"]["show_clusterings"] == "true"
     config_dict["general"]["measure_runtime"] = config_dict["general"]["measure_runtime"] == "true"
 
+    config_dict["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"] = config_dict["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"] == "true"
+    config_dict["system_parameters"]["avoid_high_effort_of_hyper_parameter_tuning"] = config_dict["system_parameters"]["avoid_high_effort_of_hyper_parameter_tuning"] == "true"
+
     config_dict["system_parameter_preferences_distance"]["find_compact_or_isolated_clusters"] = config_dict["system_parameter_preferences_distance"]["find_compact_or_isolated_clusters"] == "true"
     config_dict["system_parameter_preferences_distance"]["ignore_magnitude_and_rotation"] = config_dict["system_parameter_preferences_distance"]["ignore_magnitude_and_rotation"] == "true"
     config_dict["system_parameter_preferences_distance"]["measure_distribution_differences"] = config_dict["system_parameter_preferences_distance"]["measure_distribution_differences"] == "true"

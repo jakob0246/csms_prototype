@@ -35,11 +35,10 @@ features:
 #   - if preference = accuracy then accuracy will be preferred, if efficiency is selected then memory, runtime will be preferred,
 #     none means there are no preferences in this regard
 #   - if find_arbitrary_cluster_shapes is true then algorithms finding arbitrary cluster shapes (concave & convex clusters) will be preferred
-# TODO: more + "avoid_high_effort_of_hyper_parameter_tuning"?!
 [system_parameters]
 accuracy_efficiency_preference: efficiency
 prefer_finding_arbitrary_cluster_shapes: true
-avoid_high_effort_of_hyper_parameter_tuning: true
+avoid_high_effort_of_hyper_parameter_tuning: false
 
 # set the system parameters for preferences regarding distance based algorithms
 [system_parameter_preferences_distance]

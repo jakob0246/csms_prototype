@@ -4,24 +4,23 @@ import numpy as np
 import json
 
 
-def read_in_knowledge_db_csv(path="./KnowledgeDatabases/KnowledgeDatabaseUnsupervised.csv"):
-    dataframe = pd.read_csv(path, delimiter=";")
-
-    # TODO: check integrity of knowledge db (algorithms in set etc.)
-
-    return dataframe
-
-
-def read_in_knowledge_db_algorithms(supervised):
+def read_in_knowledge_db_algorithms(supervised, metadata):
+    # TODO: check structure
 
     # information about deriving decision rules from the thesis:
     # - added decision rule for "high_efficiency" if training and test time was true for supervised algorithms
     # - added decision rule for "medium_to_high_accuracy" if accuracy was "medium" or "high"
 
     if not supervised:
-        path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataUnsupervised.json"
+        if metadata:
+            path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataUnsupervised.json"
+        else:
+            path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsHardwareUserParamsUnupervised.json"
     else:
-        path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataSupervised.json"
+        if metadata:
+            path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataSupervised.json"
+        else:
+            path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsHardwareUserParamsSupervised.json"
 
     file = open(path)
     json_data = json.load(file)
@@ -29,29 +28,7 @@ def read_in_knowledge_db_algorithms(supervised):
     return json_data
 
 
-def select_algorithm_csv(metadata, hardware, configuration_parameters, supported_algorithms=["kmeans", "em"]):
-    knowledge_db = read_in_knowledge_db_csv()
-
-    # get selection regarding metadata and hardware
-    algorithm_scores = dict(list(map(lambda x: [x, 0], supported_algorithms)))
-    for i, row in knowledge_db.iterrows():
-        datasets_metadata_value = metadata[row["attribute"]]
-
-        if row["higher/smaller"] == "higher":
-            if datasets_metadata_value >= row["threshold"]:
-                algorithm_scores[row["algorithm"]] += row["weight"]
-        else:
-            if datasets_metadata_value < row["threshold"]:
-                algorithm_scores[row["algorithm"]] += row["weight"]
-
-    # TODO: take configuration_parameters into consideration
-
-    best_selection = max(list(algorithm_scores), key=lambda x: x[1])
-
-    return best_selection
-
-
-def normalize_algorithm_scores(algorithm_scores, knowledge_db):
+def normalize_scores(algorithm_scores, knowledge_db):
     number_of_decision_rules = len(knowledge_db["decision_rules"])
 
     for (key, value) in algorithm_scores.items():
@@ -63,27 +40,19 @@ def normalize_algorithm_scores(algorithm_scores, knowledge_db):
     return algorithm_scores
 
 
-def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters, knowledge_db, supervised=False):
-    if not supervised:
-        metadata_attributes = ["outlier_percentage", "n_rows", "n_features", "normal_distribution_percentage"]
-        hardware_attributes = []
-        configuration_attributes = ["efficient", "accurate"]
-    else:
-        metadata_attributes = ["outlier_percentage", "n_rows", "n_features", "normal_distribution_percentage"]
-        hardware_attributes = []
-        configuration_attributes = ["efficient_trainingtime", "accurate_trainingtime", "efficient_testtime", "accurate_testtime"]
-
-    threshold_stepsize = 0.5  # TODO: user-param. or integration into KDB ?
+def derive_scores_from_metadata(knowledge_db, metadata, algorithm_set, supervised):
+    # can be modified for testing purposes
+    threshold_stepsize = 0.5
 
     if knowledge_db == {}:
-        knowledge_db = read_in_knowledge_db_algorithms(supervised)
+        knowledge_db = read_in_knowledge_db_algorithms(supervised, True)
 
     weights = knowledge_db["weights"]
     thresholds = dict(list(map(lambda x: [x["attribute"], x["borders"]], knowledge_db["threshold_borders"])))
-    decision_rules = knowledge_db["decision_rules"]  # list(map(lambda x: {x["algorithm"]: x["attribute"]}, knowledge_db["decision_rules"]))
+    decision_rules = knowledge_db["decision_rules"]
 
-    # get selection regarding metadata and hardware
     algorithm_scores = dict(list(map(lambda x: [x, 0], algorithm_set)))
+    # get selection regarding metadata
     for rule in decision_rules:
         if rule["algorithm"] in algorithm_set:
             datasets_metadata_value = metadata[rule["attribute"]]
@@ -100,13 +69,68 @@ def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters
 
             algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]] * factor
 
-    # TODO: take configuration_parameters into consideration
+    # normalize algorithm_scores
+    algorithm_scores = normalize_scores(algorithm_scores, knowledge_db)
+
+    return algorithm_scores
+
+
+def change_scores_regarding_params_and_hardware_setup(hardware, configuration_parameters, algorithm_set, supervised):
+    algorithm_scores = dict(list(map(lambda x: [x, 0], algorithm_set)))
+
+    hardware_attributes = ["high_parallelization", "low_memory_requirement_training", "low_memory_requirement_test"]
+    configuration_attributes = ["high_efficiency", "medium_to_high_accuracy", "low_parameter_tuning", "arbitrary_cluster_shape"]
+
+    knowledge_db = read_in_knowledge_db_algorithms(supervised, False)
+
+    weights = knowledge_db["weights"]
+    decision_rules = knowledge_db["decision_rules"]
+
+    for rule in decision_rules:
+        if rule["algorithm"] in algorithm_set:
+            if rule["attribute"] in configuration_attributes:
+                if rule["attribute"] == "arbitrary_cluster_shape":
+                    if configuration_parameters["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"]:
+                        algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                elif rule["attribute"] == "low_parameter_tuning":
+                    if configuration_parameters["system_parameters"]["avoid_high_effort_of_hyper_parameter_tuning"]:
+                        algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                else:
+                    if configuration_parameters["system_parameters"]["accuracy_efficiency_preference"] == "accuracy":
+                        if rule["attribute"] == "medium_to_high_accuracy":
+                            algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                    else:
+                        if rule["attribute"] == "high_efficiency":
+                            algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+            elif rule["attribute"] in hardware_attributes:
+                if rule["attribute"] == "high_parallelization":
+                    if hardware["many_cpu_threads"]:
+                        algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                elif rule["attribute"] == "low_memory_requirement_training":
+                    if hardware["high_ram_amount"]:
+                        algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                elif rule["attribute"] == "low_memory_requirement_test":
+                    if hardware["high_ram_amount"]:
+                        algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+            else:
+                raise RuntimeError("Unknown decision rule attribute for hardware / user parameter KDB for algorithms!")
 
     # normalize algorithm_scores
-    algorithm_scores = normalize_algorithm_scores(algorithm_scores, knowledge_db)
+    algorithm_scores = normalize_scores(algorithm_scores, knowledge_db)
 
-    algorithm_scores_list = list(zip(algorithm_scores.keys(), algorithm_scores.values()))
+    return algorithm_scores
 
+
+def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters, knowledge_db_metadata, supervised=False):
+    algorithm_scores_metadata = derive_scores_from_metadata(knowledge_db_metadata, metadata, algorithm_set, supervised)
+    algorithm_scores_params_and_hardware = change_scores_regarding_params_and_hardware_setup(hardware, configuration_parameters, algorithm_set, supervised)
+
+    # sum up algorithm_scores_metadata and algorithm_scores_params_and_hardware
+    algorithm_scores_total = algorithm_scores_metadata
+    for (algorithm, score) in algorithm_scores_params_and_hardware.items():
+        algorithm_scores_total[algorithm] += score
+
+    algorithm_scores_list = list(zip(algorithm_scores_total.keys(), algorithm_scores_total.values()))
     best_selection = max(algorithm_scores_list, key=lambda x: x[1])
 
-    return best_selection[0], algorithm_scores, knowledge_db
+    return best_selection[0], algorithm_scores_total, knowledge_db_metadata
