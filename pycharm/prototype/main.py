@@ -80,14 +80,14 @@ if setup_result == {}:
     next_iterative_state = "algorithm_selection"
     history = []
     kdb_update_count = 0
-    knowledge_db_metadata = {}
+    knowledge_db_metadata_hardware = {}
     for iteration in range(max_iterations):
         print(f"\nRunning Iteration [{iteration + 1} / {max_iterations}] ...")
 
         # select algorithm:
         if next_iterative_state == "algorithm_selection":
-            selected_algorithm, algorithm_scores, knowledge_db_metadata = select_algorithm(remaining_algorithms_set, profiled_metadata, hardware_specs, configuration_parameters,
-                                                                                             knowledge_db_metadata, supervised=(config["general"]["learning_type"] == "supervised"))
+            selected_algorithm, algorithm_scores, knowledge_db_metadata_hardware = select_algorithm(remaining_algorithms_set, profiled_metadata, hardware_specs, configuration_parameters,
+                                                                                             knowledge_db_metadata_hardware, supervised=(config["general"]["learning_type"] == "supervised"))
 
             if iteration == 0 or (iteration != 0 and selected_algorithm != history[iteration - 1]["algorithm"]):
                 next_iterative_state = "parameter_tuning"
@@ -113,8 +113,8 @@ if setup_result == {}:
 
             remaining_algorithms_set -= {selected_algorithm}
 
-        next_iterative_state, knowledge_db_metadata, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, knowledge_db_metadata,
-                                                                                                                                                                     history, kdb_update_count, selected_algorithm, max_iterations, (config["general"]["learning_type"] == "supervised"))
+        next_iterative_state, knowledge_db_metadata_hardware, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, knowledge_db_metadata_hardware,
+                                                                                                                                                                            history, kdb_update_count, selected_algorithm, max_iterations, (config["general"]["learning_type"] == "supervised"))
 
         if iteration != 0 and history[iteration]["selected_next_best_algorithm"]:
             algorithm_scores.pop(selected_algorithm)

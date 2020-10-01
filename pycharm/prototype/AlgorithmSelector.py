@@ -87,7 +87,7 @@ def derive_scores_from_metadata_and_hardware(knowledge_db, metadata, hardware, a
     # normalize algorithm_scores
     algorithm_scores = normalize_scores(algorithm_scores, knowledge_db)
 
-    return algorithm_scores
+    return algorithm_scores, knowledge_db
 
 
 def derive_scores_from_user_parameters(configuration_parameters, algorithm_set, supervised):
@@ -122,8 +122,9 @@ def derive_scores_from_user_parameters(configuration_parameters, algorithm_set, 
     return algorithm_scores
 
 
-def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters, knowledge_db_metadata, supervised=False):
-    algorithm_scores_metadata_and_hardware = derive_scores_from_metadata_and_hardware(knowledge_db_metadata, metadata, hardware, algorithm_set, supervised)
+def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters, knowledge_db_metadata_hardware, supervised=False):
+    algorithm_scores_metadata_and_hardware, knowledge_db_metadata_hardware = derive_scores_from_metadata_and_hardware(knowledge_db_metadata_hardware,
+                                                                                                                      metadata, hardware, algorithm_set, supervised)
     algorithm_scores_parameter = derive_scores_from_user_parameters(configuration_parameters, algorithm_set, supervised)
 
     # sum up algorithm_scores_metadata and algorithm_scores_params_and_hardware
@@ -134,4 +135,4 @@ def select_algorithm(algorithm_set, metadata, hardware, configuration_parameters
     algorithm_scores_list = list(zip(algorithm_scores_total.keys(), algorithm_scores_total.values()))
     best_selection = max(algorithm_scores_list, key=lambda x: x[1])
 
-    return best_selection[0], algorithm_scores_total, knowledge_db_metadata
+    return best_selection[0], algorithm_scores_total, knowledge_db_metadata_hardware

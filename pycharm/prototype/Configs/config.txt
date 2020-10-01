@@ -18,10 +18,10 @@ measure_runtime = true
 #   - missing_values can be "cca", "aca" or "impute", "impute" uses simple mean imputation, cca runs complete case analysis
 #     and aca available case analysis TODO: auto mode? ("auto")
 [dataset]
-file_path: ../../datasets/magic04.csv
+file_path: ../../datasets/connect-4.csv
 numeric_categoricals:
 class: class
-csv_delimiter: ";"
+csv_delimiter: ","
 missing_values: cca
 
 # set the features of the dataset to be selected here

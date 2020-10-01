@@ -32,8 +32,6 @@ def update_algorithms_knowledge_db(algorithms_knowledge_db, kdb_updating_factor)
 
 
 def decide_iterative_step(main_iteration, evaluation_results, algorithm_scores, algorithms_knowledge_db, history, kdb_update_count, old_selected_algorithm, max_iterations, supervised=False):
-    # TODO
-
     # TODO: remove
     assert supervised, "Implement unsupervised part first in decide_iterative_step()!"
 
