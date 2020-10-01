@@ -3,6 +3,8 @@ from sklearn import mixture
 
 import warnings
 
+from DataClustererHelper import prepare_parameters
+
 
 def determine_n_clusters(labels):
     return len(set(labels)) - (1 if (-1) in labels else 0)
@@ -29,9 +31,7 @@ def spectral_clustering(dataset, parameters):
     # TODO: especially fix warning!
 
     warnings.filterwarnings("ignore", category=UserWarning)
-
     result_labels = SpectralClustering(parameters["k"]).fit_predict(dataset)
-
     warnings.filterwarnings("default")
 
     return result_labels
@@ -40,7 +40,12 @@ def spectral_clustering(dataset, parameters):
 def dbscan_clustering(dataset, parameters):
     # TODO: especially parameters! + label-result handling!
 
-    dbscan_result = DBSCAN(eps=parameters["epsilon"], min_samples=parameters["min_samples"], metric=parameters["distance"]).fit(dataset)  # min_samples = 1 means no noise / outliers possible
+    # modify parameters to call the clustering algorithm with modified ones, this mainly purposes the distance parameter
+    modified_parameters = prepare_parameters(parameters)
+
+    # min_samples = 1 means no noise / outliers possible
+    dbscan_result = DBSCAN(eps=modified_parameters["epsilon"], min_samples=modified_parameters["min_samples"],
+                           metric=modified_parameters["distance"], p=modified_parameters["minkowski_p"]).fit(dataset)
 
     result_labels = dbscan_result.labels_
     n_clusters = determine_n_clusters(result_labels)
@@ -54,7 +59,12 @@ def dbscan_clustering(dataset, parameters):
 def optics_clustering(dataset, parameters):
     # TODO: especially parameters! (min_samples cant be 1 ?!) + label-result handling!
 
-    optics_result = OPTICS(min_samples=parameters["min_samples"], metric=parameters["distance"]).fit(dataset)  # min_samples = 1 means no noise / outliers possible
+    # modify parameters to call the clustering algorithm with modified ones, this mainly purposes the distance parameter
+    modified_parameters = prepare_parameters(parameters)
+
+    # min_samples = 1 means no noise / outliers possible
+    optics_result = OPTICS(min_samples=modified_parameters["min_samples"], metric=modified_parameters["distance"],
+                           p=modified_parameters["minkowski_p"]).fit(dataset)
 
     result_labels = optics_result.labels_
     n_clusters = determine_n_clusters(result_labels)
@@ -75,7 +85,11 @@ def meanshift_clustering(dataset, parameters):
 
 
 def agglomerative_clustering(dataset, parameters):
-    agglomerative_result = AgglomerativeClustering(n_clusters=parameters["k"], affinity=parameters["distance"]).fit(dataset)
+    # modify parameters to call the clustering algorithm with modified ones, this mainly purposes the distance parameter
+    modified_parameters = prepare_parameters(parameters)
+
+    agglomerative_result = AgglomerativeClustering(n_clusters=parameters["k"], affinity=parameters["distance"],
+                                                   p=modified_parameters["minkowski_p"]).fit(dataset)
 
     result_labels = agglomerative_result.labels_
 

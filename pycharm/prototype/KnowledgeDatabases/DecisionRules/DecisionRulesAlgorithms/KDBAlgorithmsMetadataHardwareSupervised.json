@@ -4,7 +4,10 @@
         "n_features": 2,
         "outlier_percentage": 1.5,
         "normal_distribution_percentage": 1,
-        "high_correlation_percentage": 1
+        "high_correlation_percentage": 1,
+        "high_parallelization": 3,
+        "low_memory_requirement_training": 3,
+        "low_memory_requirement_test": 2
     },
     "threshold_borders": [
         {
@@ -26,6 +29,18 @@
         {
             "attribute": "high_correlation_percentage",
             "borders": [0.2, 0.4, 0.6]
+        },
+        {
+            "attribute": "high_parallelization",
+            "borders": [8, 16, 32]
+        },
+        {
+            "attribute": "low_memory_requirement_training",
+            "borders": [16, 8, 4]
+        },
+        {
+            "attribute": "low_memory_requirement_test",
+            "borders": [16, 8, 4]
         }
     ],
     "decision_rules": [
@@ -35,6 +50,10 @@
         },
         {
             "attribute": "high_correlation_percentage",
+            "algorithm": "knn"
+        },
+        {
+            "attribute": "low_memory_requirement_training",
             "algorithm": "knn"
         },
         {

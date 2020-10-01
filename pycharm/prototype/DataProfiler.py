@@ -39,7 +39,7 @@ def determine_outliers(dataframe):
     y_pred = classifier.fit_predict(dataframe)
     n_outliers = np.unique(y_pred, return_counts=True)[1][0]
 
-    # normalze number of outliers to dataframe size, to have an equal comparison
+    # normalize number of outliers to dataframe size, to have an equal comparison
     if sampling:
         n_outliers ** 2
 

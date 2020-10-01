@@ -31,17 +31,6 @@ class Byte:
             return np.around(Byte.size / (10 ** (byte_type.value * 3)), decimals)
 
 
-def compute_relations_out_of_specs(specs):
-    # TODO: thresholds modifiable?
-    if specs["ram"] > 16:
-        specs["high_ram_amount"] = True
-
-    if specs["cpu_threads"] > 16:
-        specs["many_cpu_threads"] = True
-
-    return specs
-
-
 def get_hardware_specs():
     hardware_specs = {
         "cpu_cores": psutil.cpu_count(logical=False),
@@ -49,11 +38,6 @@ def get_hardware_specs():
         "ram": Byte(psutil.virtual_memory().total, ByteType.byte).get_size(ByteType.gigabyte, 2),
         "cache_l3": None,
         "cache_l2": Byte(int(cpuinfo.get_cpu_info()["l2_cache_size"]), ByteType.kilobyte).get_size(ByteType.kilobyte, 1),
-        "high_cache_amount": False,
-        "high_ram_amount": False,
-        "many_cpu_threads": False
     }
-
-    hardware_specs = compute_relations_out_of_specs(hardware_specs)
 
     return hardware_specs

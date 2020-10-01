@@ -1,18 +1,11 @@
 {
     "weights": {
-        "high_parallelization": 1,
-        "low_memory_requirement_training": 1,
-        "low_memory_requirement_test": 1,
         "high_efficiency": 1.5,
         "medium_to_high_accuracy": 1.5,
         "low_parameter_tuning": 1,
         "arbitrary_cluster_shape": 1
     },
     "decision_rules": [
-        {
-            "attribute": "low_memory_requirement_training",
-            "algorithm": "knn"
-        },
         {
             "attribute": "medium_to_high_accuracy",
             "algorithm": "svc"

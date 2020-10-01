@@ -126,13 +126,13 @@ def select_distance_metric_from_kdb(metadata, configuration_parameters, distance
 def select_distance_metric(metadata, configuration_parameters, algorithm):
     supported_distance_metrics = {
         "kmeans": ["euclidean"],
-        "dbscan": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "cosine", "mahalanobis", "canberra", "jensen_shannon"],
-        "optics": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "cosine", "mahalanobis", "canberra"],
+        "dbscan": ["euclidean", "manhattan", "minkowski_other", "cosine", "mahalanobis", "canberra", "jensen_shannon"],
+        "optics": ["euclidean", "manhattan", "minkowski_other", "cosine", "mahalanobis", "canberra"],
         "agglomerative": ["euclidean", "manhattan", "cosine"],
-        "knn": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "mahalanobis", "canberra"],
-        "nearest_centroid": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "cosine", "mahalanobis", "canberra", "jensen_shannon"],
-        "radius_neighbors": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "mahalanobis", "canberra"],
-        "nca": ["euclidean", "manhattan", "minkowski_fractional", "minkowski_other", "mahalanobis", "canberra"]
+        "knn": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"],
+        "nearest_centroid": ["euclidean", "manhattan", "minkowski_other", "cosine", "mahalanobis", "canberra", "jensen_shannon"],
+        "radius_neighbors": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"],
+        "nca": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"]
     }
 
     return select_distance_metric_from_kdb(metadata, configuration_parameters, supported_distance_metrics[algorithm])
@@ -150,7 +150,7 @@ def derive_possible_parameters_equally(grid_search_meta_parameters):
     return possible_parameters
 
 
-# TODO
+# TODO:
 def derive_possible_parameters_exponentially(grid_search_meta_parameters):
     possible_parameters = []
 

@@ -20,10 +20,6 @@
     ],
     "decision_rules": [
         {
-            "attribute": "n_features",
-            "metric": "minkowski_fractional"
-        },
-        {
             "attribute": "outlier_percentage",
             "metric": "cosine"
         },

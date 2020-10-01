@@ -4,7 +4,9 @@
         "n_features": 2,
         "outlier_percentage": 1.5,
         "normal_distribution_percentage": 1,
-        "high_correlation_percentage": 1
+        "high_correlation_percentage": 1,
+        "high_parallelization": 3,
+        "low_memory_requirement": 3
     },
     "threshold_borders": [
         {
@@ -26,6 +28,14 @@
         {
             "attribute": "high_correlation_percentage",
             "borders": [0.2, 0.4, 0.6]
+        },
+        {
+            "attribute": "high_parallelization",
+            "borders": [8, 16, 32]
+        },
+        {
+            "attribute": "high_memory_requirement",
+            "borders": [16, 8, 4]
         }
     ],
     "decision_rules": [

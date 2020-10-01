@@ -8,9 +8,8 @@ import pandas as pd
 
 
 def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, sample_size, supervised, class_column, sampling=True):
-    dataset_to_evaluate = dataset
-
     # choose sample, if wanted:
+    dataset_to_evaluate = dataset
     if sampling:
         print("[Generator & Evaluator] Sampling \"" + algorithm + "\" with sample size " + str(sample_size))
         dataset_to_evaluate = dataset.sample(n=sample_size)
@@ -48,7 +47,7 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
 
         # TODO: accuracy + more
     else:
-        evaluation_metrics = {  # TODO: more
+        evaluation_metrics = {
             "accuracy": None
         }
 

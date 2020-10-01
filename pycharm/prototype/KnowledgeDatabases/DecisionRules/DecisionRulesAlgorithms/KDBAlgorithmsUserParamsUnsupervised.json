@@ -1,7 +1,5 @@
 {
     "weights": {
-        "high_parallelization": 1,
-        "low_memory_requirement": 1,
         "high_efficiency": 1.5,
         "medium_to_high_accuracy": 1.5,
         "low_parameter_tuning": 1,

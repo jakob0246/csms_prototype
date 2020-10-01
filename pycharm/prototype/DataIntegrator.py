@@ -1,5 +1,4 @@
 from scipy.io import arff
-
 import pandas as pd
 
 import re
@@ -24,7 +23,7 @@ def read_in_data_csv(path, delimiter):
         elif column_type == "numerical":
             dataframe[column] = dataframe[column].astype("float64")
         else:
-            raise Exception("Column type should be \"numerical\" or \"categorical\"! -> see config")
+            raise Exception("Column type should be \"numerical\" or \"categorical\"! -> see config! Also consider if maybe the wrong delimiter was used for CSV-files")
 
         new_column_name = column.split(":", 1)[0].lower().strip()
         dataframe.rename(columns={column: new_column_name}, inplace=True)
