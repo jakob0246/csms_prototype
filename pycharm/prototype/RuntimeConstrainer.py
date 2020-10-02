@@ -46,14 +46,22 @@ def determine_max_iterations(sample_size, speedup_multiplier, number_of_algorith
     return max_iterations
 
 
-def determine_sample_size(number_of_rows):
-    min_sample_size = 50  # should be 50, but can be changed here
-    max_sample_size = int(np.sqrt(number_of_rows))
+def determine_sample_size(number_of_rows, class_column):
+    # should be 30, but can be changed here
+    min_sample_size_per_class = 30
+
+    number_of_classes = class_column.unique().shape[0]
+
+    min_sample_size = number_of_classes * min_sample_size_per_class
+    sample_size = int(np.sqrt(number_of_rows))
 
     if number_of_rows < min_sample_size:
         raise RuntimeError(f"[RuntimeConstrainer] <Error> The number of data points is smaller than {min_sample_size}, therefore the dataset is too small! ({number_of_rows} rows)")
 
-    if max_sample_size <= min_sample_size:
+    print(f"sample_size: {sample_size}, min_sample_size: {min_sample_size}")
+
+    # if number of classes is too small, return higher sample_size than sqrt(n_rows)
+    if sample_size < min_sample_size:
         return min_sample_size
 
-    return max_sample_size  # TODO ?
+    return sample_size

@@ -84,7 +84,7 @@ def derive_scores_from_metadata(metadata, distance_metrics):
     return metric_scores
 
 
-def change_scores_regarding_user_params(configuration_parameters, distance_metrics):
+def derive_scores_from_user_params(configuration_parameters, distance_metrics):
     knowledge_db_params = read_in_knowledge_db_json(False)
 
     weights = knowledge_db_params["weights"]
@@ -103,7 +103,7 @@ def change_scores_regarding_user_params(configuration_parameters, distance_metri
 
 def select_distance_metric_from_kdb(metadata, configuration_parameters, distance_metrics):
     metric_scores_metadata = derive_scores_from_metadata(metadata, distance_metrics)
-    metric_scores_params_and_hardware = change_scores_regarding_user_params(configuration_parameters, distance_metrics)
+    metric_scores_params_and_hardware = derive_scores_from_user_params(configuration_parameters, distance_metrics)
 
     # sum up metric_scores_metadata and metric_scores_params_and_hardware
     metric_scores_total = metric_scores_metadata

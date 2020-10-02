@@ -71,7 +71,7 @@ setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], h
 remaining_algorithms_set = supported_algorithms[config["general"]["learning_type"]]
 
 if setup_result == {}:
-    sample_size = determine_sample_size(dataset.shape[0])
+    sample_size = determine_sample_size(dataset.shape[0], dataset[config["dataset"]["class"]])
     max_iterations = determine_max_iterations(sample_size, config["general"]["speedup_multiplier"], len(remaining_algorithms_set), dataset.shape[0], config["general"]["learning_type"])
 
     algorithm = None
