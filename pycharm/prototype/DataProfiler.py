@@ -85,7 +85,7 @@ def profile_data(dataframe_intitial, dataframe, class_column, supervised):
         "correlation": dataframe_missing_class.corr(),
         "covariance": dataframe_missing_class.cov(),
         "outlier_percentage": n_outliers / dataframe_missing_class.shape[0],
-        "normal_distribution_percentage": (sum(distributions[1, ...]) / dataframe_missing_class.shape[1]) if len(distributions) != 0 else 0,
+        "normal_distribution_percentage": (sum(distributions)[0] / dataframe_missing_class.shape[1]) if len(distributions) != 0 else 0,
         "high_correlation_percentage": correlation_percentage
 
         # TODO

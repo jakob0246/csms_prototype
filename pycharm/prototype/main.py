@@ -23,7 +23,7 @@ cputime_start = time.process_time()
 
 # lists all supported algorithms
 supported_algorithms = {
-    "unsupervised": {"kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm"},  # TODO: "dbscan"
+    "unsupervised": {"kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm", "dbscan"},
     "supervised": {"knn", "svc", "nearest_centroid", "radius_neighbors", "nca", "svc_sgd"}
 }
 
@@ -64,9 +64,11 @@ configuration_parameters = {
     "system_parameter_preferences_distance": config["system_parameter_preferences_distance"]
 }
 
+# TODO
 # check if the dataset already ran through the CSMS under this specific user configuration with this similar hardware
-setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], hardware_specs, configuration_parameters,
-                                               config["general"]["learning_type"])
+setup_result = {}
+# setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], hardware_specs, configuration_parameters,
+#                                                config["general"]["learning_type"])
 
 remaining_algorithms_set = supported_algorithms[config["general"]["learning_type"]]
 

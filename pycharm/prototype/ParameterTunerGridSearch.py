@@ -130,7 +130,7 @@ def select_distance_metric(metadata, configuration_parameters, algorithm):
         "optics": ["euclidean", "manhattan", "minkowski_other", "cosine", "mahalanobis", "canberra"],
         "agglomerative": ["euclidean", "manhattan", "cosine"],
         "knn": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"],
-        "nearest_centroid": ["euclidean", "manhattan", "minkowski_other", "cosine", "mahalanobis", "canberra", "jensen_shannon"],
+        "nearest_centroid": ["euclidean", "manhattan", "minkowski_other", "cosine", "canberra", "jensen_shannon"],  # "mahalanobis"
         "radius_neighbors": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"],
         "nca": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"]
     }

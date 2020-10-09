@@ -6,7 +6,7 @@
 [general]
 learning_type: supervised
 feature_scaling_and_normalization: quantile
-speedup_multiplier = 5
+speedup_multiplier = 2
 measure_runtime = true
 
 # configure parameters about the dataset here
@@ -18,10 +18,10 @@ measure_runtime = true
 #   - missing_values can be "cca", "aca" or "impute", "impute" uses simple mean imputation, cca runs complete case analysis
 #     and aca available case analysis TODO: auto mode? ("auto")
 [dataset]
-file_path: ../../datasets/letter-recognition.csv
+file_path: ../../datasets/sat.csv
 numeric_categoricals:
 class: class
-csv_delimiter: ","
+csv_delimiter: " "
 missing_values: cca
 
 # set the features of the dataset to be selected here

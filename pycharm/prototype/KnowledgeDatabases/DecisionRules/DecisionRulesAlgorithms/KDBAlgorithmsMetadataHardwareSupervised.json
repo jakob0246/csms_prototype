@@ -6,8 +6,7 @@
         "normal_distribution_percentage": 1,
         "high_correlation_percentage": 1,
         "high_parallelization": 3,
-        "low_memory_requirement_training": 3,
-        "low_memory_requirement_test": 2
+        "low_memory_requirement": 2
     },
     "threshold_borders": [
         {
@@ -35,11 +34,7 @@
             "borders": [8, 16, 32]
         },
         {
-            "attribute": "low_memory_requirement_training",
-            "borders": [16, 8, 4]
-        },
-        {
-            "attribute": "low_memory_requirement_test",
+            "attribute": "low_memory_requirement",
             "borders": [16, 8, 4]
         }
     ],
@@ -53,7 +48,11 @@
             "algorithm": "knn"
         },
         {
-            "attribute": "low_memory_requirement_training",
+            "attribute": "low_memory_requirement",
+            "algorithm": "knn"
+        },
+        {
+            "attribute": "high_parallelization",
             "algorithm": "knn"
         },
         {
@@ -77,6 +76,14 @@
             "algorithm": "svc_sgd"
         },
         {
+            "attribute": "n_features",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "nearest_centroid"
+        },
+        {
             "attribute": "n_rows",
             "algorithm": "nearest_centroid"
         },
@@ -85,11 +92,27 @@
             "algorithm": "radius_neighbors"
         },
         {
+            "attribute": "high_parallelization",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "radius_neighbors"
+        },
+        {
             "attribute": "outlier_percentage",
             "algorithm": "nca"
         },
         {
             "attribute": "high_correlation_percentage",
+            "algorithm": "nca"
+        },
+        {
+            "attribute": "high_parallelization",
             "algorithm": "nca"
         }
     ]

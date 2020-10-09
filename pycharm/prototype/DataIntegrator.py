@@ -1,3 +1,4 @@
+import numpy as np
 from scipy.io import arff
 import pandas as pd
 
@@ -15,6 +16,10 @@ def read_in_data_csv(path, delimiter):
     dataframe = pd.read_csv(path, delimiter=delimiter)
 
     check_for_ohe(dataframe.columns)
+
+    for column in dataframe.columns:
+        if dataframe[column].dtype != "int64" and dataframe[column].dtype != "float64":
+            dataframe[column] = dataframe[column].replace({"?": np.nan})
 
     for column in dataframe.columns:
         column_type = column.split(":", 1)[1].lower().strip()

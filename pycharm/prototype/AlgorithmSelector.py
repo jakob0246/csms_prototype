@@ -45,7 +45,7 @@ def derive_scores_from_metadata_and_hardware(knowledge_db, metadata, hardware, a
     threshold_stepsize = 0.5
 
     hardware_attributes_unsupervised = ["high_parallelization", "low_memory_requirement"]
-    hardware_attributes_supervised = ["high_parallelization", "low_memory_requirement_training", "low_memory_requirement_test"]
+    hardware_attributes_supervised = ["high_parallelization", "low_memory_requirement"]
 
     hardware_attributes = hardware_attributes_supervised if supervised else hardware_attributes_unsupervised
 

@@ -40,8 +40,7 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
         elif algorithm == "vbgmm":
             result_labels, n_clusters = vbgmm_clustering(dataset_to_evaluate, algorithm_parameters)
         else:
-            raise Exception(
-                "[Generator & Evaluator] clustering algorithm \"" + algorithm + "\" not supported or spelled incorrectly!")
+            raise Exception("[Generator & Evaluator] clustering algorithm \"" + algorithm + "\" not supported or spelled incorrectly!")
 
         evaluation_metrics["silhouette_score"] = metrics.silhouette_score(dataset_to_evaluate, result_labels, metric='euclidean')
 
