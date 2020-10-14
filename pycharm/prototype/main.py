@@ -89,7 +89,7 @@ if setup_result == {}:
         # select algorithm:
         if next_iterative_state == "algorithm_selection":
             selected_algorithm, algorithm_scores, knowledge_db_metadata_hardware = select_algorithm(remaining_algorithms_set, profiled_metadata, hardware_specs, configuration_parameters,
-                                                                                             knowledge_db_metadata_hardware, supervised=(config["general"]["learning_type"] == "supervised"))
+                                                                                                    knowledge_db_metadata_hardware, supervised=(config["general"]["learning_type"] == "supervised"))
 
             if iteration == 0 or (iteration != 0 and selected_algorithm != history[iteration - 1]["algorithm"]):
                 next_iterative_state = "parameter_tuning"

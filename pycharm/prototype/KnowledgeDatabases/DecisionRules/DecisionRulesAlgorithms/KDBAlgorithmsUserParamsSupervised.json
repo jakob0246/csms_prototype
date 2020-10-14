@@ -1,7 +1,7 @@
 {
     "weights": {
-        "high_efficiency": 1.5,
-        "medium_to_high_accuracy": 1.5,
+        "high_efficiency": 2,
+        "medium_to_high_accuracy": 2,
         "low_parameter_tuning": 1,
         "arbitrary_cluster_shape": 1
     },

@@ -18,10 +18,10 @@ measure_runtime = true
 #   - missing_values can be "cca", "aca" or "impute", "impute" uses simple mean imputation, cca runs complete case analysis
 #     and aca available case analysis TODO: auto mode? ("auto")
 [dataset]
-file_path: ../../datasets/sat.csv
+file_path: ../../datasets/parkinson.csv
 numeric_categoricals:
 class: class
-csv_delimiter: " "
+csv_delimiter: ";"
 missing_values: cca
 
 # set the features of the dataset to be selected here
@@ -42,7 +42,7 @@ avoid_high_effort_of_hyper_parameter_tuning: false
 
 # set the system parameters for preferences regarding distance based algorithms
 [system_parameter_preferences_distance]
-find_compact_or_isolated_clusters: false
+find_compact_or_isolated_clusters: true
 ignore_magnitude_and_rotation: false
 measure_distribution_differences: false
 grid_based_distance: false

@@ -52,7 +52,7 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
 
         X = dataset_to_evaluate.drop(columns=[class_column], axis=1)
         y = dataset_to_evaluate[class_column]
-        X_train, X_test, y_train, y_test = train_test_split(X, y)  # TODO: add "test_size=test_size" ?
+        X_train, X_test, y_train, y_test = train_test_split(X, y)
 
         if algorithm == "knn":
             evaluation_metrics = knn_clustering(X_train, X_test, y_train, y_test, algorithm_parameters, evaluation_metrics)

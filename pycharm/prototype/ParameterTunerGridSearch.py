@@ -14,7 +14,7 @@ def read_in_knowledge_db_json(get_metadata_kdb):
     # TODO: check structure
 
     # information about deriving decision rules from the thesis:
-    # - added decision rule for "n_features" if "scalability regarding number of dimensions" was "high" or "very high"
+    # - added decision rule for "high_scalability_n_features" if "scalability regarding number of dimensions" was "high" or "very high"
     # - left out much variance, since it can't be computed in a comparative way
 
     if get_metadata_kdb:
@@ -65,7 +65,10 @@ def derive_scores_from_metadata(metadata, distance_metrics):
     metric_scores = dict(list(map(lambda x: [x, 0], distance_metrics)))
     for rule in decision_rules:
         if rule["metric"] in metric_scores.keys():
-            datasets_metadata_value = metadata[rule["attribute"]]
+            if rule["attribute"] == "high_scalability_n_features":
+                datasets_metadata_value = metadata["n_features"]
+            else:
+                datasets_metadata_value = metadata[rule["attribute"]]
 
             factor = 0
             for i, threshold in enumerate(thresholds[rule["attribute"]]):
@@ -93,7 +96,8 @@ def derive_scores_from_user_params(configuration_parameters, distance_metrics):
     metric_scores = dict(list(map(lambda x: [x, 0], distance_metrics)))
     for rule in decision_rules:
         if configuration_parameters["system_parameter_preferences_distance"][rule["attribute"]]:
-            metric_scores[rule["metric"]] += weights[rule["attribute"]]
+            if rule["metric"] in metric_scores.keys():
+                metric_scores[rule["metric"]] += weights[rule["attribute"]]
 
     # normalize algorithm_scores
     metric_scores = normalize_metric_scores(metric_scores, knowledge_db_params)

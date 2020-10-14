@@ -1,13 +1,13 @@
 {
     "weights": {
-        "n_features": 2,
+        "high_scalability_n_features": 2,
         "outlier_percentage": 1.5,
         "high_correlation_percentage": 1
     },
     "threshold_borders": [
         {
-            "attribute": "n_features",
-            "borders": [30, 100, 500]
+            "attribute": "high_scalability_n_features",
+            "borders": [25, 70, 150]
         },
         {
             "attribute": "outlier_percentage",
@@ -20,11 +20,15 @@
     ],
     "decision_rules": [
         {
+            "attribute": "high_scalability_n_features",
+            "metric": "manhattan"
+        },
+        {
             "attribute": "outlier_percentage",
             "metric": "cosine"
         },
         {
-            "attribute": "n_features",
+            "attribute": "high_scalability_n_features",
             "metric": "cosine"
         },
         {

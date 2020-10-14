@@ -2,7 +2,7 @@
     "weights": {
         "n_rows": 2,
         "n_features": 2,
-        "outlier_percentage": 1.5,
+        "outlier_percentage": 1,
         "normal_distribution_percentage": 1,
         "high_correlation_percentage": 1,
         "high_parallelization": 3,
@@ -56,6 +56,10 @@
             "algorithm": "knn"
         },
         {
+            "attribute": "normal_distribution_percentage",
+            "algorithm": "knn"
+        },
+        {
             "attribute": "n_features",
             "algorithm": "svc"
         },
@@ -104,6 +108,10 @@
             "algorithm": "radius_neighbors"
         },
         {
+            "attribute": "normal_distribution_percentage",
+            "algorithm": "radius_neighbors"
+        },
+        {
             "attribute": "outlier_percentage",
             "algorithm": "nca"
         },
@@ -113,6 +121,10 @@
         },
         {
             "attribute": "high_parallelization",
+            "algorithm": "nca"
+        },
+        {
+            "attribute": "normal_distribution_percentage",
             "algorithm": "nca"
         }
     ]

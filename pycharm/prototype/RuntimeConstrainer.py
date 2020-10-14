@@ -56,7 +56,9 @@ def determine_sample_size(number_of_rows, class_column):
     sample_size = int(np.sqrt(number_of_rows))
 
     if number_of_rows < min_sample_size:
-        raise RuntimeError(f"[RuntimeConstrainer] <Error> The number of data points is smaller than {min_sample_size}, therefore the dataset is too small! ({number_of_rows} rows)")
+        print_warning(f"[Parameter Tuner] <Warning> The number of data points is smaller than {min_sample_size} (n_classes * {min_sample_size_per_class}), "
+                      f"therefore the dataset is too small! ({number_of_rows} rows) Turning off sampling ... A lot worse efficiency can be expected now!")
+        return number_of_rows
 
     print(f"sample_size: {sample_size}, min_sample_size: {min_sample_size}")
 
