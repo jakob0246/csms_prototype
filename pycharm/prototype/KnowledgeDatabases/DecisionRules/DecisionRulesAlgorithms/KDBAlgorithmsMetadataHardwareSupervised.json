@@ -1,17 +1,16 @@
 {
     "weights": {
         "n_rows": 2,
-        "n_features": 2,
-        "outlier_percentage": 1,
-        "normal_distribution_percentage": 1,
-        "high_correlation_percentage": 1,
+        "n_features": 1.5,
+        "outlier_percentage": 2,
+        "high_correlation_percentage": 1.5,
         "high_parallelization": 3,
         "low_memory_requirement": 2
     },
     "threshold_borders": [
         {
             "attribute": "n_rows",
-            "borders": [1000, 5000, 30000]
+            "borders": [3000, 25000, 50000]
         },
         {
             "attribute": "n_features",
@@ -20,10 +19,6 @@
         {
             "attribute": "outlier_percentage",
             "borders": [0.001, 0.01, 0.1]
-        },
-        {
-            "attribute": "normal_distribution_percentage",
-            "borders": [0.05, 0.2, 0.3]
         },
         {
             "attribute": "high_correlation_percentage",
@@ -56,10 +51,6 @@
             "algorithm": "knn"
         },
         {
-            "attribute": "normal_distribution_percentage",
-            "algorithm": "knn"
-        },
-        {
             "attribute": "n_features",
             "algorithm": "svc"
         },
@@ -108,10 +99,6 @@
             "algorithm": "radius_neighbors"
         },
         {
-            "attribute": "normal_distribution_percentage",
-            "algorithm": "radius_neighbors"
-        },
-        {
             "attribute": "outlier_percentage",
             "algorithm": "nca"
         },
@@ -121,10 +108,6 @@
         },
         {
             "attribute": "high_parallelization",
-            "algorithm": "nca"
-        },
-        {
-            "attribute": "normal_distribution_percentage",
             "algorithm": "nca"
         }
     ]

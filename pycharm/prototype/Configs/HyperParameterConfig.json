@@ -88,7 +88,7 @@
             "radius": {
                 "min_boundary": 10,
                 "max_boundary": 10000000,
-                "step_value": 5,
+                "step_value": 10,
                 "step_distance_strategy": "exponential"
             },
             "distance": {}

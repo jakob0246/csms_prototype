@@ -8,6 +8,7 @@ from colorama import Fore
 from colorama import Style
 
 from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
+from Helper import print_warning
 
 
 def read_in_knowledge_db_json(get_metadata_kdb):
@@ -199,7 +200,12 @@ def grid_search_further_parameters(algorithm, initial_parameters, grid_search_me
         parameters_to_evaluate = dict(list(zip(grid_search_parameters_to_tune, parameter_combination)))
 
         merged_parameters = {**parameters_to_evaluate, **initial_parameters}
-        result = generate_and_evaluate_program(algorithm, merged_parameters, dataset, sample_size, supervised, class_column, sampling=True)
+
+        try:
+            result = generate_and_evaluate_program(algorithm, merged_parameters, dataset, sample_size, supervised, class_column, sampling=True)
+        except ValueError as e:
+            print_warning(f"[Parameter Tuner] <Warning> Caught exception while sampling {algorithm} for parameters {parameter_combination}: {e}")
+            continue
 
         print("[Parameter Tuner] Tested parameters " + str(parameters_to_evaluate) + " for \"" + algorithm + f"\" and got accuracy of {result['accuracy']:.4f}")
 
@@ -210,6 +216,10 @@ def grid_search_further_parameters(algorithm, initial_parameters, grid_search_me
             if best_parameter_combination == {} or result["accuracy"] >= best_parameter_result["accuracy"]:
                 best_parameter_result = result.copy()
                 best_parameter_combination = parameters_to_evaluate
+
+    if best_parameter_combination == {} and grid_search_parameters_to_tune != set():
+        print_warning(f"[Parameter Tuner] <Warning> Not a single parameter combination could be tested! Setting parameters to the first combination ...")
+        best_parameter_combination = dict(list(zip(grid_search_parameters_to_tune, all_possible_parameter_combinations[0])))
 
     return best_parameter_combination
 

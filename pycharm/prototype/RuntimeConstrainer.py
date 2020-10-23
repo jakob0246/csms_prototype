@@ -43,6 +43,9 @@ def determine_max_iterations(sample_size, speedup_multiplier, number_of_algorith
     if max_iterations >= number_of_algorithms:
         return number_of_algorithms
 
+    if max_iterations < 2:
+        max_iterations = 2
+
     return max_iterations
 
 

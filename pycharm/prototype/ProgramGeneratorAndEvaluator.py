@@ -1,5 +1,6 @@
 from DataClustererSupervised import *
 from DataClustererUnsupervised import *
+from Helper import print_warning
 
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -53,6 +54,14 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
         X = dataset_to_evaluate.drop(columns=[class_column], axis=1)
         y = dataset_to_evaluate[class_column]
         X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+        if "distance" in algorithm_parameters.keys() and algorithm_parameters["distance"] in ["minkowski_other", "mahalanobis"]:
+            try:
+                np.linalg.inv(np.cov(X_train))
+            except np.linalg.LinAlgError:
+                print_warning(f"[Generator & Evaluator] <Warning> Inverse of chosen X_train does not exist (inverse is required for distance {algorithm_parameters['distance']}), setting distance to euclidean ...")
+                algorithm_parameters["distance"] == "euclidean"
+
 
         if algorithm == "knn":
             evaluation_metrics = knn_clustering(X_train, X_test, y_train, y_test, algorithm_parameters, evaluation_metrics)

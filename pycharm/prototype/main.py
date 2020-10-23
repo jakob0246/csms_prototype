@@ -104,7 +104,10 @@ if setup_result == {}:
 
         # generate and evaluate program:
         if next_iterative_state == "program_generation_and_evaluation":
-            results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, sample_size, (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"])
+            try:
+                results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, sample_size, (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"])
+            except ValueError:
+                results = {"accuracy": 0}
 
             if config["general"]["learning_type"] == "supervised":
                 print(f" -> Results Iteration [{iteration + 1} / {max_iterations}]: Got accuracy of {results['accuracy']:.4f} for \"" +

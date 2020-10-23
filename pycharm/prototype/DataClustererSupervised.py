@@ -6,6 +6,7 @@ import numpy as np
 from scipy.spatial import distance
 
 from DataClustererHelper import prepare_parameters
+from Helper import print_warning
 
 
 def knn_clustering(X_train, X_test, y_train, y_test, parameters, evaluation_metrics):
@@ -92,8 +93,12 @@ def nca_clustering(X_train, X_test, y_train, y_test, parameters, evaluation_metr
         initial_classifier_knn = KNeighborsClassifier(n_jobs=-1, n_neighbors=modified_parameters["k"], metric=modified_parameters["distance"],
                                                       p=modified_parameters["minkowski_p"])
     else:
-        initial_classifier_knn = KNeighborsClassifier(n_jobs=-1, n_neighbors=modified_parameters["k"], metric=modified_parameters["distance"],
+        try:
+            initial_classifier_knn = KNeighborsClassifier(n_jobs=-1, n_neighbors=modified_parameters["k"], metric=modified_parameters["distance"],
                                                       p=modified_parameters["minkowski_p"], algorithm="brute", metric_params={"VI": np.linalg.inv(np.cov(X_train))})
+        except np.linalg.LinAlgError:
+            print_warning(f"[Generator & Evaluator] <Warning> Error happened while running NCA, setting distance to euclidean & running again ...")
+            initial_classifier_knn = KNeighborsClassifier(n_jobs=-1, n_neighbors=modified_parameters["k"], metric="euclidean", p=modified_parameters["minkowski_p"])
 
     nca.fit(X_train, y_train)
     classifier = initial_classifier_knn.fit(nca.transform(X_train), y_train)

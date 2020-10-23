@@ -1,17 +1,17 @@
 {
     "weights": {
         "n_rows": 2,
-        "n_features": 2,
-        "outlier_percentage": 1.5,
+        "n_features": 1.5,
+        "outlier_percentage": 2,
         "normal_distribution_percentage": 1,
-        "high_correlation_percentage": 1,
+        "high_correlation_percentage": 1.5,
         "high_parallelization": 3,
-        "low_memory_requirement": 3
+        "low_memory_requirement": 2
     },
     "threshold_borders": [
         {
             "attribute": "n_rows",
-            "borders": [1000, 5000, 30000]
+            "borders": [3000, 25000, 50000]
         },
         {
             "attribute": "n_features",
