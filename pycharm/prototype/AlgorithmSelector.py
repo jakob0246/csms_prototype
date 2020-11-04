@@ -15,7 +15,7 @@ def read_in_knowledge_db_algorithms(supervised, metadata):
         if metadata:
             path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataHardwareUnsupervised.json"
         else:
-            path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsHardwareUserParamsUnupervised.json"
+            path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsUserParamsUnsupervised.json"
     else:
         if metadata:
             path = "KnowledgeDatabases/DecisionRules/DecisionRulesAlgorithms/KDBAlgorithmsMetadataHardwareSupervised.json"
@@ -110,8 +110,12 @@ def derive_scores_from_user_parameters(configuration_parameters, algorithm_set, 
                     algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
             else:
                 if configuration_parameters["system_parameters"]["accuracy_efficiency_preference"] == "accuracy":
-                    if rule["attribute"] == "medium_to_high_accuracy":
-                        algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                    if supervised:
+                        if rule["attribute"] == "medium_to_high_accuracy":
+                            algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
+                    else:
+                        if rule["attribute"] == "high_accuracy":
+                            algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]
                 else:
                     if rule["attribute"] == "high_efficiency":
                         algorithm_scores[rule["algorithm"]] += weights[rule["attribute"]]

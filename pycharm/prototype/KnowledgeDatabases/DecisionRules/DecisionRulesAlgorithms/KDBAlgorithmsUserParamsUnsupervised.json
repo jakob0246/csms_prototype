@@ -1,14 +1,102 @@
 {
     "weights": {
-        "high_efficiency": 1.5,
-        "medium_to_high_accuracy": 1.5,
+        "high_efficiency": 2,
+        "high_accuracy": 2,
         "low_parameter_tuning": 1,
         "arbitrary_cluster_shape": 1
     },
     "decision_rules": [
         {
-            "attribute": "TODO",
-            "algorithm": "TODO"
+            "attribute": "high_efficiency",
+            "algorithm": "kmeans"
+        },
+        {
+            "attribute": "high_efficiency",
+            "algorithm": "meanshift"
+        },
+        {
+            "attribute": "high_efficiency",
+            "algorithm": "agglomerative"
+        },
+        {
+            "attribute": "high_efficiency",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "high_efficiency",
+            "algorithm": "optics"
+        },
+        {
+            "attribute": "high_accuracy",
+            "algorithm": "kmeans"
+        },
+        {
+            "attribute": "high_accuracy",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "high_accuracy",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "high_accuracy",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "high_accuracy",
+            "algorithm": "affinity"
+        },
+        {
+            "attribute": "high_accuracy",
+            "algorithm": "spectral"
+        },
+        {
+            "attribute": "low_parameter_tuning",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "low_parameter_tuning",
+            "algorithm": "meanshift"
+        },
+        {
+            "attribute": "low_parameter_tuning",
+            "algorithm": "optics"
+        },
+        {
+            "attribute": "low_parameter_tuning",
+            "algorithm": "affinity"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "meanshift"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "agglomerative"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "optics"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "affinity"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "spectral"
         }
     ]
 }

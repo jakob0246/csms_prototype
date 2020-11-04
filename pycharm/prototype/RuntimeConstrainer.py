@@ -49,7 +49,7 @@ def determine_max_iterations(sample_size, speedup_multiplier, number_of_algorith
     return max_iterations
 
 
-def determine_sample_size(number_of_rows, class_column):
+def determine_sample_size_supervised(number_of_rows, class_column):
     # should be 30, but can be changed here
     min_sample_size_per_class = 30
 
@@ -68,5 +68,27 @@ def determine_sample_size(number_of_rows, class_column):
     # if number of classes is too small, return higher sample_size than sqrt(n_rows)
     if sample_size < min_sample_size:
         return min_sample_size
+
+    return sample_size
+
+
+def determine_sample_size_unsupervised(number_of_rows):
+    min_sample_size = 50
+
+    sample_size = int(np.sqrt(number_of_rows))
+
+    if sample_size < min_sample_size:
+        print_warning(f"[Parameter Tuner] <Warning> The number of data points is smaller than {min_sample_size}^2 ( = {min_sample_size ** 2}), "
+                      f"therefore the dataset is too small! ({number_of_rows} rows) Turning off sampling ... A lot worse efficiency can be expected now!")
+        return number_of_rows
+
+    return sample_size
+
+
+def determine_sample_size(number_of_rows, dataset, class_column, supervised):
+    if supervised:
+        sample_size = determine_sample_size_supervised(number_of_rows, dataset[class_column])
+    else:
+        sample_size = determine_sample_size_unsupervised(number_of_rows)
 
     return sample_size

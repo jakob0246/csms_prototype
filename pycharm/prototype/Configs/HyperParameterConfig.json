@@ -32,9 +32,9 @@
                 "step_distance_strategy": "equal"
             },
             "epsilon": {
-                "min_boundary": 10000.0,
+                "min_boundary": 10.0,
                 "max_boundary": 10000000.0,
-                "step_value": 5,
+                "step_value": 10,
                 "step_distance_strategy": "exponential"
             },
             "distance": {}
@@ -60,7 +60,12 @@
         },
         "affinity": {},
         "vbgmm": {
-            "max_n_components": {}
+            "max_n_components": {
+                "min_boundary": 100,
+                "max_boundary": 100,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            }
         }
     },
     "supervised": {

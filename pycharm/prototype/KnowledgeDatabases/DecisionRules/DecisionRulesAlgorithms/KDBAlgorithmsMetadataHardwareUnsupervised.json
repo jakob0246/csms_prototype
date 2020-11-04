@@ -3,7 +3,6 @@
         "n_rows": 2,
         "n_features": 1.5,
         "outlier_percentage": 2,
-        "normal_distribution_percentage": 1,
         "high_correlation_percentage": 1.5,
         "high_parallelization": 3,
         "low_memory_requirement": 2
@@ -22,10 +21,6 @@
             "borders": [0.001, 0.01, 0.1]
         },
         {
-            "attribute": "normal_distribution_percentage",
-            "borders": [0.05, 0.2, 0.3]
-        },
-        {
             "attribute": "high_correlation_percentage",
             "borders": [0.2, 0.4, 0.6]
         },
@@ -34,45 +29,17 @@
             "borders": [8, 16, 32]
         },
         {
-            "attribute": "high_memory_requirement",
+            "attribute": "low_memory_requirement",
             "borders": [16, 8, 4]
         }
     ],
     "decision_rules": [
         {
-            "attribute": "outlier_percentage",
+            "attribute": "n_rows",
             "algorithm": "kmeans"
         },
         {
-            "attribute": "outlier_percentage",
-            "algorithm": "em"
-        },
-        {
-            "attribute": "normal_distribution_percentage",
-            "algorithm": "em"
-        },
-        {
-            "attribute": "high_correlation_percentage",
-            "algorithm": "em"
-        },
-        {
-            "attribute": "outlier_percentage",
-            "algorithm": "vbgmm"
-        },
-        {
-            "attribute": "normal_distribution_percentage",
-            "algorithm": "vbgmm"
-        },
-        {
-            "attribute": "high_correlation_percentage",
-            "algorithm": "vbgmm"
-        },
-        {
             "attribute": "n_rows",
-            "algorithm": "meanshift"
-        },
-        {
-            "attribute": "normal_distribution_percentage",
             "algorithm": "meanshift"
         },
         {
@@ -80,8 +47,52 @@
             "algorithm": "dbscan"
         },
         {
-            "attribute": "outlier_percentage",
+            "attribute": "n_features",
+            "algorithm": "kmeans"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "agglomerative"
+        },
+        {
+            "attribute": "n_features",
             "algorithm": "dbscan"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "spectral"
+        },
+        {
+            "attribute": "n_outliers",
+            "algorithm": "kmeans"
+        },
+        {
+            "attribute": "n_outliers",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "n_outliers",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "n_outliers",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "n_outliers",
+            "algorithm": "affinity"
+        },
+        {
+            "attribute": "n_outliers",
+            "algorithm": "spectral"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "em"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "vbgmm"
         },
         {
             "attribute": "high_correlation_percentage",
@@ -92,20 +103,40 @@
             "algorithm": "optics"
         },
         {
-            "attribute": "outlier_percentage",
-            "algorithm": "affinity"
+            "attribute": "high_parallelization",
+            "algorithm": "meanshift"
         },
         {
-            "attribute": "n_rows",
+            "attribute": "high_parallelization",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "high_parallelization",
+            "algorithm": "optics"
+        },
+        {
+            "attribute": "high_parallelization",
             "algorithm": "spectral"
         },
         {
-            "attribute": "n_features",
-            "algorithm": "spectral"
+            "attribute": "low_memory_requirement",
+            "algorithm": "kmeans"
         },
         {
-            "attribute": "outlier_percentage",
-            "algorithm": "spectral"
+            "attribute": "low_memory_requirement",
+            "algorithm": "vbgmm"
+        },
+        {
+            "attribute": "low_memory_requirement",
+            "algorithm": "meanshift"
+        },
+        {
+            "attribute": "low_memory_requirement",
+            "algorithm": "dbscan"
+        },
+        {
+            "attribute": "low_memory_requirement",
+            "algorithm": "optics"
         }
     ]
 }

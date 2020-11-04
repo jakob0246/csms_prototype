@@ -135,7 +135,7 @@ def select_distance_metric(metadata, configuration_parameters, algorithm):
         "optics": ["euclidean", "manhattan", "minkowski_other", "cosine", "mahalanobis", "canberra"],
         "agglomerative": ["euclidean", "manhattan", "cosine"],
         "knn": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"],
-        "nearest_centroid": ["euclidean", "manhattan", "minkowski_other", "cosine", "canberra", "jensen_shannon"],  # "mahalanobis"
+        "nearest_centroid": ["euclidean", "manhattan", "minkowski_other", "cosine", "canberra", "jensen_shannon"],
         "radius_neighbors": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"],
         "nca": ["euclidean", "manhattan", "minkowski_other", "mahalanobis", "canberra"]
     }
@@ -207,11 +207,15 @@ def grid_search_further_parameters(algorithm, initial_parameters, grid_search_me
             print_warning(f"[Parameter Tuner] <Warning> Caught exception while sampling {algorithm} for parameters {parameter_combination}: {e}")
             continue
 
-        print("[Parameter Tuner] Tested parameters " + str(parameters_to_evaluate) + " for \"" + algorithm + f"\" and got accuracy of {result['accuracy']:.4f}")
+        if supervised:
+            print("[Parameter Tuner] Tested parameters " + str(parameters_to_evaluate) + " for \"" + algorithm + f"\" and got accuracy of {result['accuracy']:.4f}")
+        else:
+            print("[Parameter Tuner] Tested parameters " + str(parameters_to_evaluate) + " for \"" + algorithm + f"\" and got silhouette_score_standardized of {result['silhouette_score_standardized']:.4f}")
 
         if not supervised:
-            # TODO
-            pass
+            if best_parameter_combination == {} or result["silhouette_score_standardized"] >= best_parameter_result["silhouette_score_standardized"]:
+                best_parameter_result = result.copy()
+                best_parameter_combination = parameters_to_evaluate
         else:
             if best_parameter_combination == {} or result["accuracy"] >= best_parameter_result["accuracy"]:
                 best_parameter_result = result.copy()

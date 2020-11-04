@@ -4,7 +4,7 @@
 #     using quantiles, if "" no scaling method will be applied (the number of quantiles used is equal to the number of data points
 #     divided by 10; it is also recommended to only use quantiles if the dataset is large)
 [general]
-learning_type: supervised
+learning_type: unsupervised
 feature_scaling_and_normalization: quantile
 speedup_multiplier = 2
 measure_runtime = true
@@ -18,10 +18,10 @@ measure_runtime = true
 #   - missing_values can be "cca", "aca" or "impute", "impute" uses simple mean imputation, cca runs complete case analysis
 #     and aca available case analysis TODO: auto mode? ("auto")
 [dataset]
-file_path: ../../datasets/magic04.csv
+file_path: ../../datasets/sat.csv
 numeric_categoricals:
 class: class
-csv_delimiter: ";"
+csv_delimiter: " "
 missing_values: cca
 
 # set the features of the dataset to be selected here
@@ -29,7 +29,6 @@ missing_values: cca
 [feature_selection]
 type: exclude
 features:
-# age, sc, hemo, class
 
 # set the main system parameters
 #   - if preference = accuracy then accuracy will be preferred, if efficiency is selected then memory, runtime will be preferred,

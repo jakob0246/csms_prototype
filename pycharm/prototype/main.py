@@ -73,7 +73,7 @@ setup_result = {}
 remaining_algorithms_set = supported_algorithms[config["general"]["learning_type"]]
 
 if setup_result == {}:
-    sample_size = determine_sample_size(dataset.shape[0], dataset[config["dataset"]["class"]])
+    sample_size = determine_sample_size(dataset.shape[0], dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
     max_iterations = determine_max_iterations(sample_size, config["general"]["speedup_multiplier"], len(remaining_algorithms_set), dataset.shape[0], config["general"]["learning_type"])
 
     algorithm = None
@@ -107,14 +107,17 @@ if setup_result == {}:
             try:
                 results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, sample_size, (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"])
             except ValueError:
-                results = {"accuracy": 0}
+                if config["general"]["learning_type"] == "supervised":
+                    results = {"accuracy": 0}
+                else:
+                    results = {"silhouette_score": -1, "silhouette_score_standardized": 0}
 
             if config["general"]["learning_type"] == "supervised":
                 print(f" -> Results Iteration [{iteration + 1} / {max_iterations}]: Got accuracy of {results['accuracy']:.4f} for \"" +
                       selected_algorithm + f"\" (score of {algorithm_scores[selected_algorithm]:.4f}) with parameters: " + str(algorithm_parameters))
             else:
-                # TODO
-                pass
+                print(f" -> Results Iteration [{iteration + 1} / {max_iterations}]: Got silhouette_score_standardized of {results['silhouette_score_standardized']:.4f} for \"" +
+                      selected_algorithm + f"\" (selection-score of {algorithm_scores[selected_algorithm]:.4f}) with parameters: " + str(algorithm_parameters))
 
             remaining_algorithms_set -= {selected_algorithm}
 
@@ -153,7 +156,7 @@ end_results = generate_and_evaluate_program(selected_algorithm, algorithm_parame
 if config["general"]["learning_type"] == "supervised":
     print(f"-*- Got final accuracy of {end_results['accuracy']:.4f}\n")
 else:
-    print("-*- Got final evaluation results: TODO \n")  # TODO: unsupervised case
+    print(f"-*- Got final silhouette_score_standardized of {end_results['silhouette_score_standardized']:.4f}\n")  # TODO: unsupervised case
 
 cputime_end = time.process_time()
 if config["general"]["measure_runtime"]:

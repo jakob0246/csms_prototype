@@ -8,6 +8,11 @@ from sklearn import metrics
 import pandas as pd
 
 
+def standardize_silhouette_score(silhouette_score):
+    silhouette_score_standardized = 0.5 * (silhouette_score + 1)
+    return silhouette_score_standardized
+
+
 def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, sample_size, supervised, class_column, sampling=True):
     # choose sample, if wanted:
     dataset_to_evaluate = dataset
@@ -18,8 +23,9 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
     # generate & evaluate program
 
     if not supervised:
-        evaluation_metrics = {  # TODO
-            "silhouette_score": None
+        evaluation_metrics = {
+            "silhouette_score": None,
+            "silhouette_score_standardized": None
         }
 
         if algorithm == "kmeans":
@@ -44,8 +50,8 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
             raise Exception("[Generator & Evaluator] clustering algorithm \"" + algorithm + "\" not supported or spelled incorrectly!")
 
         evaluation_metrics["silhouette_score"] = metrics.silhouette_score(dataset_to_evaluate, result_labels, metric='euclidean')
+        evaluation_metrics["silhouette_score_standardized"] = standardize_silhouette_score(evaluation_metrics["silhouette_score"])
 
-        # TODO: accuracy + more
     else:
         evaluation_metrics = {
             "accuracy": None
