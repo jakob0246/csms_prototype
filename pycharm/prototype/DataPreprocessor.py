@@ -48,8 +48,6 @@ def scale_and_normalize_features(dataset, parameter, class_column, supervised):
         else:
             dataset_transformed = quantile_scale_and_normalize(dataset_transformed, feature)
 
-    # TODO: automatic way of choosing standard or quantile per feature?
-
     return dataset_transformed
 
 

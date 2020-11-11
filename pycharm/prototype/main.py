@@ -14,6 +14,7 @@ from ParameterTunerGridSearch import tune_parameters
 from ProgramGeneratorAndEvaluator import generate_and_evaluate_program
 from IterativeStepDecider import decide_iterative_step
 from KDBSetupManager import check_for_setup_in_knowledge_db, write_setup_to_knowledge_db
+from ReportGenerator import initialize_report_generation, report_preprocessing_part_to_latex, report_results_part_to_latex, report_selection_part_to_latex, report_setup_part_to_latex, generate_report
 
 from RuntimeConstrainer import *
 
@@ -23,12 +24,14 @@ cputime_start = time.process_time()
 
 # lists all supported algorithms
 supported_algorithms = {
-    "unsupervised": {"kmeans", "spectral", "optics", "meanshift", "agglomerative", "affinity", "em", "vbgmm", "dbscan"},
+    "unsupervised": {"kmeans", "em", "vbgmm", "meanshift", "agglomerative", "optics", "affinity", "spectral"},
     "supervised": {"knn", "svc", "nearest_centroid", "radius_neighbors", "nca", "svc_sgd"}
 }
 
 # get parameters from config.txt
 config = get_configuration()
+
+report_tex_file = initialize_report_generation(config["dataset"]["file_path"], config["general"]["learning_type"])
 
 # read in initial dataset and do feature selection based on the users wishes
 dataset_initial = read_in_data(config["dataset"]["file_path"], config["dataset"]["csv_delimiter"])
@@ -51,10 +54,12 @@ if config["general"]["learning_type"] == "unsupervised":
 else:
     dataset = prepare_for_supervised_learning(dataset, config["dataset"]["numeric_categoricals"], config["dataset"]["class"])
 
-# scale and normalize features
-if config["general"]["feature_scaling_and_normalization"] != "":
+# scale and normalize features for supervised use-case
+if config["general"]["learning_type"] == "supervised":
     dataset = scale_and_normalize_features(dataset, config["general"]["feature_scaling_and_normalization"],
-                                           config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))  # TODO: how to treat supervised case?
+                                           config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
+
+report_preprocessing_part_to_latex(report_tex_file)
 
 # get all data the clustering selection part and parameter tuning part will exploit
 profiled_metadata = profile_data(dataset_initial, dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
@@ -64,7 +69,8 @@ configuration_parameters = {
     "system_parameter_preferences_distance": config["system_parameter_preferences_distance"]
 }
 
-# TODO
+report_setup_part_to_latex(report_tex_file)
+
 # check if the dataset already ran through the CSMS under this specific user configuration with this similar hardware
 setup_result = {}
 # setup_result = check_for_setup_in_knowledge_db(config["dataset"]["file_path"], hardware_specs, configuration_parameters,
@@ -122,7 +128,7 @@ if setup_result == {}:
             remaining_algorithms_set -= {selected_algorithm}
 
         next_iterative_state, knowledge_db_metadata_hardware, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, knowledge_db_metadata_hardware,
-                                                                                                                                                                            history, kdb_update_count, selected_algorithm, max_iterations, (config["general"]["learning_type"] == "supervised"))
+                                                                                                                                                                            history, kdb_update_count, selected_algorithm, algorithm_parameters, max_iterations, (config["general"]["learning_type"] == "supervised"))
 
         if iteration != 0 and history[iteration]["selected_next_best_algorithm"]:
             algorithm_scores.pop(selected_algorithm)
@@ -151,7 +157,7 @@ else:
 print("\n-*- Running final decision of algorithm \"" + selected_algorithm + "\" with parameters: " + str(algorithm_parameters) + " ...")
 
 end_results = generate_and_evaluate_program(selected_algorithm, algorithm_parameters, dataset, 0,
-                                           (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"], sampling=False)
+                                                   (config["general"]["learning_type"] == "supervised"), config["dataset"]["class"], sampling=False)
 
 if config["general"]["learning_type"] == "supervised":
     print(f"-*- Got final accuracy of {end_results['accuracy']:.4f}\n")
@@ -162,5 +168,7 @@ cputime_end = time.process_time()
 if config["general"]["measure_runtime"]:
     print(f"-*- All in all took {cputime_end - cputime_start:.4f}s (CPU time)")
 
-# TODO: write results / steps / documentation into report
-pass
+
+report_selection_part_to_latex(report_tex_file)
+report_results_part_to_latex(report_tex_file, config["general"]["learning_type"], dataset, end_results, config["dataset"]["class"])
+generate_report(report_tex_file, config["general"]["learning_type"], config["dataset"]["file_path"])

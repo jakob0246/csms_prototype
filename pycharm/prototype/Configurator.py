@@ -7,12 +7,11 @@ def parse_config(path: str = "Configs/config.txt") -> dict:
 
     # TODO: exception handling
     assumed_metastructure = {
-        "general": ["learning_type", "feature_scaling_and_normalization", "speedup_multiplier", "measure_runtime"],
+        "general": ["learning_type", "speedup_multiplier", "measure_runtime"],
         "dataset": ["file_path", "numeric_categoricals", "class", "csv_delimiter", "missing_values"],
         "feature_selection": ["type", "features"],
         "system_parameters": ["accuracy_efficiency_preference", "prefer_finding_arbitrary_cluster_shapes", "avoid_high_effort_of_hyper_parameter_tuning"],
         "system_parameter_preferences_distance": ["find_compact_or_isolated_clusters", "ignore_magnitude_and_rotation", "measure_distribution_differences", "grid_based_distance"],
-        "test_parameters": ["use_categorial_encoding", "show_clusterings"]
     }
 
     assert list(assumed_metastructure.keys()).sort() == list(parser_config.sections()).sort(), "config: config.txt not correctly formatted!"
@@ -34,7 +33,7 @@ def get_configuration() -> dict:
 
     config_dict = raw_config_dict.copy()
 
-    # DONE: preprocess raw config parameters:
+    # preprocess raw config parameters:
     for key_outer in config_dict.keys():
         for key_inner in config_dict[key_outer].keys():
             config_dict[key_outer][key_inner] = config_dict[key_outer][key_inner].lower().strip()
@@ -46,8 +45,6 @@ def get_configuration() -> dict:
         "config: \"feature_selection\" -> \"type\" setting must be \"exclude\" or \"include\""
     assert config_dict["general"]["learning_type"] in ["supervised", "unsupervised"], \
         "config: \"general\" -> \"learning_type\" setting must be \"supervised\" or \"unsupervised\""
-    assert config_dict["general"]["feature_scaling_and_normalization"] in ["", "standard", "quantile"], \
-        "config: \"general\" -> \"feature_scaling_and_normalization\" setting must be \"\", \"standard\" or \"quantile\""
     assert config_dict["dataset"]["missing_values"] in ["cca", "aca", "impute"], \
         "config: \"dataset\" -> \"missing_values\" setting must be \"cca\", \"aca\" or \"impute\""
 
@@ -55,7 +52,6 @@ def get_configuration() -> dict:
     config_dict["feature_selection"]["features"] = list(map(lambda ele: ele.strip(), config_dict["feature_selection"]["features"].split(",")))
     config_dict["dataset"]["numeric_categoricals"] = list(map(lambda ele: ele.strip(), config_dict["dataset"]["numeric_categoricals"].split(",")))
 
-    config_dict["test_parameters"]["show_clusterings"] = config_dict["test_parameters"]["show_clusterings"] == "true"
     config_dict["general"]["measure_runtime"] = config_dict["general"]["measure_runtime"] == "true"
 
     config_dict["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"] = config_dict["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"] == "true"

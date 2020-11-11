@@ -1,11 +1,11 @@
 {
     "weights": {
-        "n_rows": 2,
-        "n_features": 1.5,
-        "outlier_percentage": 2,
+        "n_rows": 1.5,
+        "n_features": 1,
+        "outlier_percentage": 1,
         "high_correlation_percentage": 1.5,
-        "high_parallelization": 3,
-        "low_memory_requirement": 2
+        "high_parallelization": 1.5,
+        "low_memory_requirement": 1
     },
     "threshold_borders": [
         {
@@ -63,27 +63,27 @@
             "algorithm": "spectral"
         },
         {
-            "attribute": "n_outliers",
+            "attribute": "outlier_percentage",
             "algorithm": "kmeans"
         },
         {
-            "attribute": "n_outliers",
+            "attribute": "outlier_percentage",
             "algorithm": "em"
         },
         {
-            "attribute": "n_outliers",
+            "attribute": "outlier_percentage",
             "algorithm": "vbgmm"
         },
         {
-            "attribute": "n_outliers",
+            "attribute": "outlier_percentage",
             "algorithm": "dbscan"
         },
         {
-            "attribute": "n_outliers",
+            "attribute": "outlier_percentage",
             "algorithm": "affinity"
         },
         {
-            "attribute": "n_outliers",
+            "attribute": "outlier_percentage",
             "algorithm": "spectral"
         },
         {

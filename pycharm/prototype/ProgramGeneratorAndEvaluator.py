@@ -25,7 +25,8 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
     if not supervised:
         evaluation_metrics = {
             "silhouette_score": None,
-            "silhouette_score_standardized": None
+            "silhouette_score_standardized": None,
+            "result_labels": None
         }
 
         if algorithm == "kmeans":
@@ -51,6 +52,7 @@ def generate_and_evaluate_program(algorithm, algorithm_parameters, dataset, samp
 
         evaluation_metrics["silhouette_score"] = metrics.silhouette_score(dataset_to_evaluate, result_labels, metric='euclidean')
         evaluation_metrics["silhouette_score_standardized"] = standardize_silhouette_score(evaluation_metrics["silhouette_score"])
+        evaluation_metrics["result_labels"] = result_labels
 
     else:
         evaluation_metrics = {

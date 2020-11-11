@@ -25,6 +25,7 @@ def read_in_knowledge_db_json(get_metadata_kdb):
 
     file = open(path)
     json_data = json.load(file)
+    file.close()
 
     return json_data
 
@@ -36,6 +37,7 @@ def read_in_hyper_parameter_config():
 
     file = open(path)
     json_data = json.load(file)
+    file.close()
 
     return json_data
 

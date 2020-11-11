@@ -31,7 +31,7 @@ def update_algorithms_knowledge_db(algorithms_knowledge_db, kdb_updating_factor)
     return new_algorithms_knowledge_db
 
 
-def decide_iterative_step(main_iteration, evaluation_results, algorithm_scores, algorithms_knowledge_db, history, kdb_update_count, old_selected_algorithm, max_iterations, supervised=False):
+def decide_iterative_step(main_iteration, evaluation_results, algorithm_scores, algorithms_knowledge_db, history, kdb_update_count, old_selected_algorithm, algorithm_parameters, max_iterations, supervised=False):
     algorithms_knowledge_db_updated = algorithms_knowledge_db.copy()
 
     if supervised:
@@ -74,6 +74,10 @@ def decide_iterative_step(main_iteration, evaluation_results, algorithm_scores, 
                     best_algorithm = history_element["algorithm"]
                     best_algorithms_parameters = history_element["parameters"]
                     best_result = history_element["results"]["accuracy"] if supervised else history_element["results"]["silhouette_score_standardized"]
+
+            if (supervised and evaluation_results["accuracy"] > best_result) or ((not supervised) and evaluation_results["silhouette_score_standardized"] > best_result):
+                best_algorithm = old_selected_algorithm
+                best_algorithms_parameters = algorithm_parameters
 
             decided_algorithm = best_algorithm
         else:

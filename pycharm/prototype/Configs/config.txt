@@ -1,11 +1,7 @@
 # configure general parameters here
 #   - learning-type can be "supervised" or "unsupervised"
-#   - if feature_scaling_and_normalization is "standard" then standard scaling is applied, "quantile" stands for transformation
-#     using quantiles, if "" no scaling method will be applied (the number of quantiles used is equal to the number of data points
-#     divided by 10; it is also recommended to only use quantiles if the dataset is large)
 [general]
 learning_type: unsupervised
-feature_scaling_and_normalization: quantile
 speedup_multiplier = 2
 measure_runtime = true
 
@@ -18,10 +14,10 @@ measure_runtime = true
 #   - missing_values can be "cca", "aca" or "impute", "impute" uses simple mean imputation, cca runs complete case analysis
 #     and aca available case analysis TODO: auto mode? ("auto")
 [dataset]
-file_path: ../../datasets/sat.csv
+file_path: ../../datasets/magic04.csv
 numeric_categoricals:
 class: class
-csv_delimiter: " "
+csv_delimiter: ";"
 missing_values: cca
 
 # set the features of the dataset to be selected here
@@ -45,9 +41,3 @@ find_compact_or_isolated_clusters: true
 ignore_magnitude_and_rotation: false
 measure_distribution_differences: false
 grid_based_distance: false
-
-# ! only temporary for testing !
-#   - use_categorial_encoding should not be optional in real system?
-[test_parameters]
-use_categorial_encoding: true
-show_clusterings: true

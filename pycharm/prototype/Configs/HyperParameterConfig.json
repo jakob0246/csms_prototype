@@ -26,15 +26,15 @@
         },
         "dbscan": {
             "min_samples": {
-                "min_boundary": 2,
+                "min_boundary": 6,
                 "max_boundary": 10,
                 "step_value": 1,
                 "step_distance_strategy": "equal"
             },
             "epsilon": {
                 "min_boundary": 10.0,
-                "max_boundary": 10000000.0,
-                "step_value": 10,
+                "max_boundary": 10000.0,
+                "step_value": 4,
                 "step_distance_strategy": "exponential"
             },
             "distance": {}
@@ -61,8 +61,8 @@
         "affinity": {},
         "vbgmm": {
             "max_n_components": {
-                "min_boundary": 100,
-                "max_boundary": 100,
+                "min_boundary": 15,
+                "max_boundary": 15,
                 "step_value": 1,
                 "step_distance_strategy": "equal"
             }

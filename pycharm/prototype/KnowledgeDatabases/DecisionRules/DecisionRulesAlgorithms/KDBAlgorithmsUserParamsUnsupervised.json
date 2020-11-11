@@ -1,9 +1,9 @@
 {
     "weights": {
-        "high_efficiency": 2,
-        "high_accuracy": 2,
-        "low_parameter_tuning": 1,
-        "arbitrary_cluster_shape": 1
+        "high_efficiency": 1,
+        "high_accuracy": 1.5,
+        "low_parameter_tuning": 1.5,
+        "arbitrary_cluster_shape": 1.5
     },
     "decision_rules": [
         {
@@ -73,10 +73,6 @@
         {
             "attribute": "arbitrary_cluster_shape",
             "algorithm": "vbgmm"
-        },
-        {
-            "attribute": "arbitrary_cluster_shape",
-            "algorithm": "meanshift"
         },
         {
             "attribute": "arbitrary_cluster_shape",
