@@ -37,13 +37,15 @@ report_tex_file = initialize_report_generation(config["dataset"]["file_path"], c
 dataset_initial = read_in_data(config["dataset"]["file_path"], config["dataset"]["csv_delimiter"])
 dataset_initial = user_feature_selection(dataset_initial, config["feature_selection"]["features"], config["feature_selection"]["type"])
 
+report_statistics_preprocessing = {}
+report_statistics_preprocessing["ohe_columns"] = len(list(set(dataset_initial.select_dtypes(include=['category']).columns)))
+
 # initial & further preprocessing of the dataset
 dataset_initial = initial_preprocessing(dataset_initial, config["dataset"]["numeric_categoricals"], config["dataset"]["class"], config["general"]["learning_type"])
-dataset = further_preprocessing(dataset_initial, config["dataset"]["missing_values"])
+dataset, report_statistics_preprocessing["rows_with_missings"] = further_preprocessing(dataset_initial)
 
 # simple data cleaning of erroneous data
-# TODO: maybe directly after read in
-dataset = clean_dataset(dataset)
+dataset, report_statistics_preprocessing["non_distinct_rows"] = clean_dataset(dataset)
 
 # heuristically and simply select features
 dataset = simple_automatic_feature_selection(dataset)
@@ -59,7 +61,8 @@ if config["general"]["learning_type"] == "supervised":
     dataset = scale_and_normalize_features(dataset, config["general"]["feature_scaling_and_normalization"],
                                            config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
 
-report_preprocessing_part_to_latex(report_tex_file)
+report_statistics_preprocessing["n_quaniles"] = dataset.shape[0] // 10
+report_preprocessing_part_to_latex(report_tex_file, report_statistics_preprocessing)
 
 # get all data the clustering selection part and parameter tuning part will exploit
 profiled_metadata = profile_data(dataset_initial, dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
@@ -69,7 +72,12 @@ configuration_parameters = {
     "system_parameter_preferences_distance": config["system_parameter_preferences_distance"]
 }
 
-report_setup_part_to_latex(report_tex_file)
+report_statistics_setup = {
+    "metadata": profiled_metadata,
+    "hardware": hardware_specs,
+    "parameters": configuration_parameters
+}
+report_setup_part_to_latex(report_tex_file, report_statistics_setup, config["general"]["learning_type"] == "supervised")
 
 # check if the dataset already ran through the CSMS under this specific user configuration with this similar hardware
 setup_result = {}
@@ -130,6 +138,8 @@ if setup_result == {}:
         next_iterative_state, knowledge_db_metadata_hardware, history, next_decided_algorithm, kdb_update_count, overall_best_algorithms_parameters = decide_iterative_step(iteration, results, algorithm_scores, knowledge_db_metadata_hardware,
                                                                                                                                                                             history, kdb_update_count, selected_algorithm, algorithm_parameters, max_iterations, (config["general"]["learning_type"] == "supervised"))
 
+        history[iteration]["selected_algorithm_score"] = algorithm_scores[selected_algorithm]
+
         if iteration != 0 and history[iteration]["selected_next_best_algorithm"]:
             algorithm_scores.pop(selected_algorithm)
 
@@ -165,10 +175,20 @@ else:
     print(f"-*- Got final silhouette_score_standardized of {end_results['silhouette_score_standardized']:.4f}\n")  # TODO: unsupervised case
 
 cputime_end = time.process_time()
+total_cputime = cputime_end - cputime_start
 if config["general"]["measure_runtime"]:
-    print(f"-*- All in all took {cputime_end - cputime_start:.4f}s (CPU time)")
+    print(f"-*- All in all took {total_cputime:.4f}s (CPU time)")
 
+report_statistics_selection = history
+report_selection_part_to_latex(report_tex_file, report_statistics_selection, config["general"]["learning_type"] == "supervised")
 
-report_selection_part_to_latex(report_tex_file)
-report_results_part_to_latex(report_tex_file, config["general"]["learning_type"], dataset, end_results, config["dataset"]["class"])
+report_statistics_result = {
+    "algorithm": selected_algorithm,
+    "parameters": algorithm_parameters,
+    "end_results": end_results,
+    "total_cputime": total_cputime
+}
+report_results_part_to_latex(report_tex_file, config["general"]["learning_type"], dataset, end_results, config["dataset"]["class"],
+                             report_statistics_result, config["general"]["learning_type"] == "supervised")
+
 generate_report(report_tex_file, config["general"]["learning_type"], config["dataset"]["file_path"])

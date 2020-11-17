@@ -11,4 +11,4 @@ connect-4.csv
 covtype.csv
 
 # Misc
-reports/
+reports/tmp_generate_latex/

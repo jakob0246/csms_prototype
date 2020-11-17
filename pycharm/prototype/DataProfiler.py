@@ -8,6 +8,13 @@ from scipy.stats import shapiro, normaltest, anderson
 import time
 
 
+def determine_class_std_deviation(dataframe, class_column):
+    values_per_class = dataframe[class_column].value_counts()
+    std_deviation = values_per_class.std()
+
+    return std_deviation
+
+
 def determine_normal_distributions(dataframe):
     # drop categoricals: (because ordinal values arent scope of thesis? and nominal values cant be modelled after a distribution)
     columns_to_drop = dataframe.select_dtypes(include=['category']).columns
@@ -76,20 +83,24 @@ def profile_data(dataframe_intitial, dataframe, class_column, supervised):
                 n_high_correlations += 1
     correlation_percentage = n_high_correlations / (0.5 * (corr_matrix.shape[0] ** 2 - corr_matrix.shape[0]))
 
+    if supervised:
+        class_std_deviation = determine_class_std_deviation(dataframe, class_column)
+    else:
+        class_std_deviation = None
+
     data_profile = {
         "dtypes": dataframe_initial_missing_class.dtypes,
         "n_rows": dataframe_missing_class.shape[0],
         "n_features": dataframe_missing_class.shape[1],
+        "n_classes": 0 if class_column == "" or class_column not in dataframe_intitial.columns else len(dataframe[class_column].unique()),
         "nvalues": dataframe_missing_class.count(),
-        "nmissing_values": pd.Series(((np.ones(dataframe_initial_missing_class.shape[1]) * dataframe_initial_missing_class.shape[0]) - dataframe_initial_missing_class.count().values).astype(int), index=dataframe_initial_missing_class.columns),
+        "nmissing_values": np.sum(pd.Series(((np.ones(dataframe_initial_missing_class.shape[1]) * dataframe_initial_missing_class.shape[0]) - dataframe_initial_missing_class.count().values).astype(int), index=dataframe_initial_missing_class.columns)),
         "correlation": dataframe_missing_class.corr(),
         "covariance": dataframe_missing_class.cov(),
         "outlier_percentage": n_outliers / dataframe_missing_class.shape[0],
         "normal_distribution_percentage": (sum(distributions)[0] / dataframe_missing_class.shape[1]) if len(distributions) != 0 else 0,
-        "high_correlation_percentage": correlation_percentage
-
-        # TODO
-
+        "high_correlation_percentage": correlation_percentage,
+        "class_std_deviation": class_std_deviation
     }
 
     profiling_time_end = time.time()

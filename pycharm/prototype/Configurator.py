@@ -8,7 +8,7 @@ def parse_config(path: str = "Configs/config.txt") -> dict:
     # TODO: exception handling
     assumed_metastructure = {
         "general": ["learning_type", "speedup_multiplier", "measure_runtime"],
-        "dataset": ["file_path", "numeric_categoricals", "class", "csv_delimiter", "missing_values"],
+        "dataset": ["file_path", "numeric_categoricals", "class", "csv_delimiter"],
         "feature_selection": ["type", "features"],
         "system_parameters": ["accuracy_efficiency_preference", "prefer_finding_arbitrary_cluster_shapes", "avoid_high_effort_of_hyper_parameter_tuning"],
         "system_parameter_preferences_distance": ["find_compact_or_isolated_clusters", "ignore_magnitude_and_rotation", "measure_distribution_differences", "grid_based_distance"],
@@ -45,8 +45,6 @@ def get_configuration() -> dict:
         "config: \"feature_selection\" -> \"type\" setting must be \"exclude\" or \"include\""
     assert config_dict["general"]["learning_type"] in ["supervised", "unsupervised"], \
         "config: \"general\" -> \"learning_type\" setting must be \"supervised\" or \"unsupervised\""
-    assert config_dict["dataset"]["missing_values"] in ["cca", "aca", "impute"], \
-        "config: \"dataset\" -> \"missing_values\" setting must be \"cca\", \"aca\" or \"impute\""
 
     # TODO parse raw config: feature-extraction, type-conversions etc.:
     config_dict["feature_selection"]["features"] = list(map(lambda ele: ele.strip(), config_dict["feature_selection"]["features"].split(",")))

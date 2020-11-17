@@ -11,14 +11,11 @@ measure_runtime = true
 #   - numeric_categorials are categorials which should be treated as a number, e.g. values of the set {1, 2, 3, 4}
 #   - csv_delimiter is only important if a csv file should be used
 #   - class should contain the name of the class column
-#   - missing_values can be "cca", "aca" or "impute", "impute" uses simple mean imputation, cca runs complete case analysis
-#     and aca available case analysis TODO: auto mode? ("auto")
 [dataset]
-file_path: ../../datasets/magic04.csv
+file_path: ../../datasets/mk3.csv
 numeric_categoricals:
 class: class
-csv_delimiter: ";"
-missing_values: cca
+csv_delimiter: " "
 
 # set the features of the dataset to be selected here
 #   - if type = exclude then the listed features are getting excluded, if type = include then only these will get included

@@ -60,7 +60,7 @@ def clean_dataset(dataset):
 
     # TODO: more?
 
-    return dataset_cleaned
+    return dataset_cleaned, dataset.shape[0] - dataset_cleaned.shape[0]
 
 
 def user_feature_selection(dataset, features, selection_type):
@@ -70,7 +70,7 @@ def user_feature_selection(dataset, features, selection_type):
     return dataset[features]
 
 
-def handle_missing_values(dataset, config_parameter):
+def handle_missing_values(dataset, config_parameter="cca"):
     dataset_modified = dataset.copy()
 
     if config_parameter == "cca":
@@ -88,11 +88,13 @@ def handle_missing_values(dataset, config_parameter):
     return dataset_modified
 
 
-def further_preprocessing(dataframe, missing_value_parameter):
-    # handle missing values (CCA or imputation):
-    dataframe = handle_missing_values(dataframe, missing_value_parameter)
+def further_preprocessing(dataframe):
+    n_rows_before = len(dataframe)
 
-    return dataframe
+    # handle missing values (CCA or imputation):
+    dataframe = handle_missing_values(dataframe)
+
+    return dataframe, n_rows_before - len(dataframe)
 
 
 def initial_preprocessing(dataframe, numeric_categorials, class_column, learning_type):
