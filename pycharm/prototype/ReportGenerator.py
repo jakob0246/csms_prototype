@@ -63,7 +63,7 @@ def report_setup_part_to_latex(report_tex_file, report_statistics, supervised):
     report_tex_file.write(f"Value & {report_statistics['metadata']['n_rows']} & {report_statistics['metadata']['n_features']} & {report_statistics['metadata']['n_classes']} & {report_statistics['metadata']['nmissing_values']} \\\\ ")
     report_tex_file.write(ReportGeneratorHelper.large_latex_part14)
     report_tex_file.write(ReportGeneratorHelper.large_latex_part15)
-    report_tex_file.write(f"Value & {report_statistics['metadata']['outlier_percentage']} & {report_statistics['metadata']['high_correlation_percentage']} & {report_statistics['metadata']['class_std_deviation'] if supervised else '-'} \\\\ ")
+    report_tex_file.write(f"Value & {report_statistics['metadata']['outlier_percentage']:.4f} & {report_statistics['metadata']['high_correlation_percentage']:.4f} & {(report_statistics['metadata']['class_std_deviation']) if supervised else '-'} \\\\ ")
     report_tex_file.write(ReportGeneratorHelper.large_latex_part16)
 
 
@@ -72,6 +72,7 @@ def report_selection_part_to_latex(report_tex_file, report_statistics, supervise
     report_tex_file.write("\\begin{table}[H] \\caption{Listing of all CSMS Iterations} \\adjustbox{max width=\\columnwidth}{ \\begin{tabular}{p{2cm}C{3.5cm}C{2cm}C{7cm}C{3.5cm}} \\toprule \\emph{Iteration} & Selected Algorithm & Selection-Score & Tuned (Hyper-) Parameters & " + ("Accuracy" if supervised else "Silh. Score") + " of Sampling \\\\ \\midrule \\midrule ")
 
     for i, statistic in enumerate(report_statistics):
+        statistic['algorithm'] = statistic['algorithm'].replace("_", "\\_")
         report_tex_file.write(f"Iteration {i + 1} & {statistic['algorithm']} & {statistic['selected_algorithm_score']:.2f} & {generate_parameters_string(statistic['parameters'])} & { statistic['results']['accuracy'] if supervised else statistic['results']['silhouette_score_standardized']:.2f} \\\\ ")
 
     report_tex_file.write(ReportGeneratorHelper.large_latex_part18)

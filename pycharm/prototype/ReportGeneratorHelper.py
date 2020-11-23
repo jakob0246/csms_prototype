@@ -18,7 +18,7 @@ class ReportGeneratorHelper:
     large_latex_part12 = "\\bottomrule \\end{tabular} } \\end{table} "
     large_latex_part13 = "\\begin{table}[ht!] \\caption{ \\emph{General} Profiled Metadata Results regarding the Dataset} \\centering \\adjustbox{max width= \\columnwidth} { \\begin{tabular}{p{1.5cm}||C{2cm}C{2cm}C{2cm}C{3cm}} \\toprule \\emph{Statistic} & \\emph{ \\#Rows} & \\emph{ \\#Columns} & \\#Classes & \\# Missing Values \\\\ "
     large_latex_part14 = "\\bottomrule \\end{tabular} } \\end{table} "
-    large_latex_part15 = "\\begin{table}[ht!] \\caption{\\emph{Further} Profiled Metadata Results regarding the Dataset} \\centering \\adjustbox{max width=\\columnwidth} { \\begin{tabular}{p{1.5cm}||C{2cm}C{3cm}C{3cm}} \\toprule \\emph{Statistic} & \\emph{Outlier \\%} & \\emph{High Correlation \\%} & Class Std. Deviation \\\\ "
+    large_latex_part15 = "\\begin{table}[ht!] \\caption{\\emph{Further} Profiled Metadata Results regarding the Dataset} \\centering \\adjustbox{max width=\\columnwidth} { \\begin{tabular}{p{1.5cm}||C{2cm}C{3cm}C{4cm}} \\toprule \\emph{Statistic} & \\emph{Outlier \\%} & \\emph{High Correlation \\%} & Class Std. Deviation \\\\ "
     large_latex_part16 = "\\bottomrule \\end{tabular} } \\end{table} "
     large_latex_part17 = "\\bottomrule \\end{tabular} } \\end{table} "
     large_latex_part18 = "\\bottomrule \\end{tabular} } \\end{table} "

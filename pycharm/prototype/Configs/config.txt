@@ -1,7 +1,7 @@
 # configure general parameters here
 #   - learning-type can be "supervised" or "unsupervised"
 [general]
-learning_type: unsupervised
+learning_type: supervised
 speedup_multiplier = 2
 measure_runtime = true
 
@@ -12,10 +12,10 @@ measure_runtime = true
 #   - csv_delimiter is only important if a csv file should be used
 #   - class should contain the name of the class column
 [dataset]
-file_path: ../../datasets/mk3.csv
+file_path: ../../datasets/connect-4.csv
 numeric_categoricals:
 class: class
-csv_delimiter: " "
+csv_delimiter: ","
 
 # set the features of the dataset to be selected here
 #   - if type = exclude then the listed features are getting excluded, if type = include then only these will get included

@@ -47,9 +47,6 @@ dataset, report_statistics_preprocessing["rows_with_missings"] = further_preproc
 # simple data cleaning of erroneous data
 dataset, report_statistics_preprocessing["non_distinct_rows"] = clean_dataset(dataset)
 
-# heuristically and simply select features
-dataset = simple_automatic_feature_selection(dataset)
-
 # prepare the dataset based on the learning type
 if config["general"]["learning_type"] == "unsupervised":
     dataset = prepare_for_unsupervised_learning(dataset, config["dataset"]["numeric_categoricals"], config["dataset"]["class"])
@@ -58,8 +55,7 @@ else:
 
 # scale and normalize features for supervised use-case
 if config["general"]["learning_type"] == "supervised":
-    dataset = scale_and_normalize_features(dataset, config["general"]["feature_scaling_and_normalization"],
-                                           config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
+    dataset = scale_and_normalize_features(dataset, config["dataset"]["class"], (config["general"]["learning_type"] == "supervised"))
 
 report_statistics_preprocessing["n_quaniles"] = dataset.shape[0] // 10
 report_preprocessing_part_to_latex(report_tex_file, report_statistics_preprocessing)

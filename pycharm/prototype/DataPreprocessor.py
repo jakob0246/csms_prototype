@@ -38,7 +38,7 @@ def quantile_scale_and_normalize(dataset, feature):
     return dataset_transformed
 
 
-def scale_and_normalize_features(dataset, parameter, class_column, supervised):
+def scale_and_normalize_features(dataset, class_column, supervised, parameter="quantile"):
     dataset_transformed = dataset.copy()
 
     features_to_normalize = set(dataset.columns) - set([class_column]) if supervised else set(dataset.columns)
