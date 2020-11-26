@@ -1,0 +1,114 @@
+{
+    "weights": {
+        "n_rows": 2,
+        "n_features": 1.5,
+        "outlier_percentage": 2,
+        "high_correlation_percentage": 1.5,
+        "high_parallelization": 3,
+        "low_memory_requirement": 2
+    },
+    "threshold_borders": [
+        {
+            "attribute": "n_rows",
+            "borders": [3000, 25000, 50000]
+        },
+        {
+            "attribute": "n_features",
+            "borders": [30, 100, 500]
+        },
+        {
+            "attribute": "outlier_percentage",
+            "borders": [0.001, 0.01, 0.1]
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "borders": [0.2, 0.4, 0.6]
+        },
+        {
+            "attribute": "high_parallelization",
+            "borders": [8, 16, 32]
+        },
+        {
+            "attribute": "low_memory_requirement",
+            "borders": [16, 8, 4]
+        }
+    ],
+    "decision_rules": [
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "knn"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "knn"
+        },
+        {
+            "attribute": "low_memory_requirement",
+            "algorithm": "knn"
+        },
+        {
+            "attribute": "high_parallelization",
+            "algorithm": "knn"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "nearest_centroid"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "nearest_centroid"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "high_parallelization",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "n_rows",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "n_features",
+            "algorithm": "radius_neighbors"
+        },
+        {
+            "attribute": "outlier_percentage",
+            "algorithm": "nca"
+        },
+        {
+            "attribute": "high_correlation_percentage",
+            "algorithm": "nca"
+        },
+        {
+            "attribute": "high_parallelization",
+            "algorithm": "nca"
+        }
+    ]
+}

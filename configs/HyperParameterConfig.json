@@ -1,0 +1,112 @@
+{
+    "unsupervised": {
+        "kmeans": {
+            "n_clusters": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            }
+        },
+        "em": {
+            "n_clusters": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            }
+        },
+        "spectral": {
+            "n_clusters": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            }
+        },
+        "dbscan": {
+            "min_samples": {
+                "min_boundary": 6,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            },
+            "epsilon": {
+                "min_boundary": 10.0,
+                "max_boundary": 10000.0,
+                "step_value": 4,
+                "step_distance_strategy": "exponential"
+            },
+            "distance": {}
+        },
+        "optics": {
+            "min_samples": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            },
+            "distance": {}
+        },
+        "meanshift": {},
+        "agglomerative": {
+            "n_clusters": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            },
+            "distance": {}
+        },
+        "affinity": {},
+        "vbgmm": {
+            "max_n_components": {
+                "min_boundary": 15,
+                "max_boundary": 15,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            }
+        }
+    },
+    "supervised": {
+        "knn": {
+            "k": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            },
+            "distance": {}
+        },
+        "svc": {
+            "degree": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            }
+        },
+        "nearest_centroid": {
+            "distance": {}
+        },
+        "radius_neighbors": {
+            "radius": {
+                "min_boundary": 10,
+                "max_boundary": 10000000,
+                "step_value": 10,
+                "step_distance_strategy": "exponential"
+            },
+            "distance": {}
+        },
+        "nca": {
+            "k": {
+                "min_boundary": 2,
+                "max_boundary": 10,
+                "step_value": 1,
+                "step_distance_strategy": "equal"
+            },
+            "distance": {}
+        },
+        "svc_sgd": {}
+    }
+}

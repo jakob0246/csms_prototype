@@ -1,0 +1,38 @@
+{
+    "weights": {
+        "high_efficiency": 2,
+        "medium_to_high_accuracy": 2,
+        "low_parameter_tuning": 1,
+        "arbitrary_cluster_shape": 1
+    },
+    "decision_rules": [
+        {
+            "attribute": "medium_to_high_accuracy",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "arbitrary_cluster_shape",
+            "algorithm": "svc"
+        },
+        {
+            "attribute": "high_efficiency",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "medium_to_high_accuracy",
+            "algorithm": "svc_sgd"
+        },
+        {
+            "attribute": "high_efficiency",
+            "algorithm": "nearest_centroid"
+        },
+        {
+            "attribute": "low_parameter_tuning",
+            "algorithm": "nearest_centroid"
+        },
+        {
+            "attribute": "medium_to_high_accuracy",
+            "algorithm": "nca"
+        }
+    ]
+}

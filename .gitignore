@@ -1,4 +1,4 @@
-# Default
+# MacOS
 .DS_Store
 
 # PyCharm
@@ -6,9 +6,5 @@ venv/
 .idea/
 __pycache__/
 
-# Specific datasets
-connect-4.csv
-covtype.csv
-
-# Misc
+# CSMS
 reports/tmp_generate_latex/

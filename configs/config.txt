@@ -1,0 +1,37 @@
+# configure general parameters here
+#   - learning-type can be "supervised" or "unsupervised"
+[general]
+learning_type: supervised
+speedup_multiplier = 2
+
+# configure parameters about the dataset here
+#   - arff and csv files are supported
+#   - if file is a CSV, have columns like: "<name>: <type>" where <type> can be "numerical" or "categorical" in the first row of the file
+#   - csv_delimiter is only important if a csv file should be used
+#   - class should contain the name of the class column
+[dataset]
+file_path: datasets/agaricus-lepiota.csv
+class: class
+csv_delimiter: ","
+
+# set the features of the dataset to be selected here
+#   - if type = exclude then the listed features are getting excluded, if type = include then only these will get included
+[feature_selection]
+type: exclude
+features:
+
+# set the main system parameters
+#   - if preference = accuracy then accuracy will be preferred, if efficiency is selected then memory, runtime will be preferred,
+#     none means there are no preferences in this regard
+#   - if find_arbitrary_cluster_shapes is true then algorithms finding arbitrary cluster shapes (concave & convex clusters) will be preferred
+[system_parameters]
+accuracy_efficiency_preference: efficiency
+prefer_finding_arbitrary_cluster_shapes: true
+avoid_high_effort_of_hyper_parameter_tuning: false
+
+# set the system parameters for preferences regarding distance based algorithms
+[system_parameter_preferences_distance]
+find_compact_or_isolated_clusters: true
+ignore_magnitude_and_rotation: false
+measure_distribution_differences: false
+grid_based_distance: false
