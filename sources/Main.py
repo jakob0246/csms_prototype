@@ -2,7 +2,7 @@ import time
 
 from sources.Configurator import get_configuration
 from sources.DataIntegrator import read_in_data
-from sources.DataPreprocessor import user_feature_selection, initial_preprocessing, prepare_for_unsupervised_learning, \
+from sources.DataPreprocessor import initial_preprocessing, prepare_for_unsupervised_learning, \
                              prepare_for_supervised_learning, clean_dataset, scale_and_normalize_features, further_preprocessing
 
 from sources.DataProfiler import profile_data
@@ -33,7 +33,6 @@ report_tex_file = initialize_report_generation(config["dataset"]["file_path"], c
 
 # read in initial dataset and do feature selection based on the users wishes
 dataset_initial = read_in_data(config["dataset"]["file_path"], config["dataset"]["csv_delimiter"])
-dataset_initial = user_feature_selection(dataset_initial, config["feature_selection"]["features"], config["feature_selection"]["type"])
 
 report_statistics_preprocessing = {}
 report_statistics_preprocessing["ohe_columns"] = len(list(set(dataset_initial.select_dtypes(include=['category']).columns)))

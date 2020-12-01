@@ -9,7 +9,6 @@ def parse_config(path: str = "Configs/config.txt") -> dict:
     assumed_metastructure = {
         "general": ["learning_type", "speedup_multiplier"],
         "dataset": ["file_path", "class", "csv_delimiter"],
-        "feature_selection": ["type", "features"],
         "system_parameters": ["accuracy_efficiency_preference", "prefer_finding_arbitrary_cluster_shapes", "avoid_high_effort_of_hyper_parameter_tuning"],
         "system_parameter_preferences_distance": ["find_compact_or_isolated_clusters", "ignore_magnitude_and_rotation", "measure_distribution_differences", "grid_based_distance"],
     }
@@ -41,14 +40,10 @@ def get_configuration() -> dict:
     # TODO: check integrity of user config attributes
     assert config_dict["system_parameters"]["accuracy_efficiency_preference"] in ["efficiency", "accuracy", "none"], \
         "config: \"system_parameters\" -> \"accuracy_efficiency_preference\" setting must be \"efficiency\", \"accuracy\", or \"none\""
-    assert config_dict["feature_selection"]["type"] in ["exclude", "include"], \
-        "config: \"feature_selection\" -> \"type\" setting must be \"exclude\" or \"include\""
     assert config_dict["general"]["learning_type"] in ["supervised", "unsupervised"], \
         "config: \"general\" -> \"learning_type\" setting must be \"supervised\" or \"unsupervised\""
 
     # TODO parse raw config: feature-extraction, type-conversions etc.:
-    config_dict["feature_selection"]["features"] = list(map(lambda ele: ele.strip(), config_dict["feature_selection"]["features"].split(",")))
-
     config_dict["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"] = config_dict["system_parameters"]["prefer_finding_arbitrary_cluster_shapes"] == "true"
     config_dict["system_parameters"]["avoid_high_effort_of_hyper_parameter_tuning"] = config_dict["system_parameters"]["avoid_high_effort_of_hyper_parameter_tuning"] == "true"
 

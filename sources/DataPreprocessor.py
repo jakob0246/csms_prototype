@@ -63,13 +63,6 @@ def clean_dataset(dataset):
     return dataset_cleaned, dataset.shape[0] - dataset_cleaned.shape[0]
 
 
-def user_feature_selection(dataset, features, selection_type):
-    if selection_type == "exclude":
-        return dataset[set(dataset.columns) - set(features)]
-
-    return dataset[features]
-
-
 def handle_missing_values(dataset, config_parameter="cca"):
     dataset_modified = dataset.copy()
 
