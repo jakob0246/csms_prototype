@@ -22,12 +22,12 @@ def generate_parameters_string(parameters):
 
 def initialize_report_generation(dataset_path, learning_type):
     try:
-        os.mkdir("reports/tmp_generate_latex")
+        os.mkdir("../reports/tmp_generate_latex")
     except FileExistsError:
-        shutil.rmtree("reports/tmp_generate_latex")
-        os.mkdir("reports/tmp_generate_latex")
+        shutil.rmtree("../reports/tmp_generate_latex")
+        os.mkdir("../reports/tmp_generate_latex")
 
-    new_report_tex_file = open("reports/tmp_generate_latex/report.tex", "w+")
+    new_report_tex_file = open("../reports/tmp_generate_latex/report.tex", "w+")
 
     new_report_tex_file.write(ReportGeneratorHelper.large_latex_part1)
     dataset_path = dataset_path.replace('_', '\\_')
@@ -112,16 +112,16 @@ def generate_report(report_tex_file, learning_type, dataset_path, verbose=True):
 
     try:
         if verbose:
-            os.system("pdflatex reports/tmp_generate_latex/report.tex")
+            os.system("pdflatex ../reports/tmp_generate_latex/report.tex")
         else:
-            _ = subprocess.run(["pdflatex", "reports/tmp_generate_latex/report.tex"], stdout=subprocess.DEVNULL)
+            _ = subprocess.run(["pdflatex", "../reports/tmp_generate_latex/report.tex"], stdout=subprocess.DEVNULL)
     except:
         print_warning("<Warning> Could not generate report, maybe pdflatex needs to be installed first.")
 
     os.remove("report.aux")
     os.remove("report.log")
 
-    shutil.rmtree("reports/tmp_generate_latex")
+    shutil.rmtree("../reports/tmp_generate_latex")
 
-    shutil.move("report.pdf", "reports/report.pdf")
-    os.rename("reports/report.pdf", f"reports/report_{learning_type}_{dataset_path.split('/')[len(dataset_path.split('/')) - 1]}.pdf")
+    shutil.move("report.pdf", "../reports/report.pdf")
+    os.rename("../reports/report.pdf", f"../reports/report_{learning_type}_{dataset_path.split('/')[len(dataset_path.split('/')) - 1]}.pdf")

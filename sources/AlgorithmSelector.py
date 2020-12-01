@@ -13,14 +13,14 @@ def read_in_knowledge_db_algorithms(supervised, metadata):
 
     if not supervised:
         if metadata:
-            path = "knowledge_databases/decision_rules_algorithms/KDBAlgorithmsMetadataHardwareUnsupervised.json"
+            path = "../knowledge_databases/decision_rules_algorithms/KDBAlgorithmsMetadataHardwareUnsupervised.json"
         else:
-            path = "knowledge_databases/decision_rules_algorithms/KDBAlgorithmsUserParamsUnsupervised.json"
+            path = "../knowledge_databases/decision_rules_algorithms/KDBAlgorithmsUserParamsUnsupervised.json"
     else:
         if metadata:
-            path = "knowledge_databases/decision_rules_algorithms/KDBAlgorithmsMetadataHardwareSupervised.json"
+            path = "../knowledge_databases/decision_rules_algorithms/KDBAlgorithmsMetadataHardwareSupervised.json"
         else:
-            path = "knowledge_databases/decision_rules_algorithms/KDBAlgorithmsUserParamsSupervised.json"
+            path = "../knowledge_databases/decision_rules_algorithms/KDBAlgorithmsUserParamsSupervised.json"
 
     file = open(path)
     json_data = json.load(file)

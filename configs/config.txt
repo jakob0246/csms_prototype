@@ -10,7 +10,7 @@ speedup_multiplier = 2
 #   - csv_delimiter is only important if a csv file should be used
 #   - class should contain the name of the class column
 [dataset]
-file_path: datasets/agaricus-lepiota.csv
+file_path: ../datasets/agaricus-lepiota.csv
 class: class
 csv_delimiter: ","
 

@@ -1,7 +1,7 @@
 import configparser
 
 
-def parse_config(path: str = "Configs/config.txt") -> dict:
+def parse_config(path: str = "../configs/config.txt") -> dict:
     parser_config = configparser.ConfigParser()
     parser_config.read(path)
 

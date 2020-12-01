@@ -19,9 +19,9 @@ def read_in_knowledge_db_json(get_metadata_kdb):
     # - left out much variance, since it can't be computed in a comparative way
 
     if get_metadata_kdb:
-        path = "knowledge_databases/decision_rules_distance_metrics/KDBDistanceMetricsMetadata.json"
+        path = "../knowledge_databases/decision_rules_distance_metrics/KDBDistanceMetricsMetadata.json"
     else:
-        path = "knowledge_databases/decision_rules_distance_metrics/KDBDistanceMetricsUserParams.json"
+        path = "../knowledge_databases/decision_rules_distance_metrics/KDBDistanceMetricsUserParams.json"
 
     file = open(path)
     json_data = json.load(file)
@@ -33,7 +33,7 @@ def read_in_knowledge_db_json(get_metadata_kdb):
 def read_in_hyper_parameter_config():
     # TODO: check structure
 
-    path = "configs/HyperParameterConfig.json"
+    path = "../configs/HyperParameterConfig.json"
 
     file = open(path)
     json_data = json.load(file)
