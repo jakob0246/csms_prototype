@@ -14,7 +14,7 @@ file_path: datasets/agaricus-lepiota.csv
 class: class
 csv_delimiter: ","
 
-# set the features of the dataset to be selected here
+# set the features of the dataset to be selected here 
 #   - if type = exclude then the listed features are getting excluded, if type = include then only these will get included
 [feature_selection]
 type: exclude
